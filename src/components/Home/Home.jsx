@@ -1,13 +1,17 @@
 import React from 'react'
 import './../Home/Home.css'
 
+import iconImg from './../../img/icon.png'
+import menuImg from './../../img/menu.svg'
+import homeImg from './../../img/HomeImg.png'
+
 export const Home = () => {
     return (
         <div className="container">
             <nav className="navbar navbar-expand-lg">
                 
                 <a className="navbar-brand navbar__logo" href="#">
-                    <img src="./img/icon.png"/>
+                    <img src={iconImg}/>
                     <p className="navbar__logo__text">  Lifestyle Reminder </p>
                 </a>
                 
@@ -36,7 +40,7 @@ export const Home = () => {
                 
 
                 <div className="info__img">
-                    <img src="./img/Home.png"/>
+                    <img src={homeImg}/>
                 </div>
 
             </div>
