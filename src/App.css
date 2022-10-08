@@ -1,0 +1,29 @@
+html{
+  font-size: 62.5%;
+  box-sizing: border-box;
+  font-family: 'Inter Tight', sans-serif;
+}
+*,*:before,*:after{
+  box-sizing: inherit;
+}
+
+.container {
+  max-width: 120rem;
+  width: 90%;
+  margin: 0 auto;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #F9F2ED !important;
+  overflow-x: hidden;
+}
+a {
+  text-decoration: none;
+}
+li {
+  list-style: none;
+}
