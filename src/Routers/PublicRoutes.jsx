@@ -6,6 +6,6 @@ import { Navigate} from 'react-router-dom'
 export const PublicRoutes = ({children}) => {
     const authContext = useContext(context)
     return (authContext.logged)
-    ?<Navigate to='/'></Navigate> 
+    ?<Navigate to='/main'></Navigate> 
     :children
 }

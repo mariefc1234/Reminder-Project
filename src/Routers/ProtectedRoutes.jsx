@@ -7,5 +7,5 @@ export const ProtectedRoutes = ({children}) => {
     const authContext = useContext(context)
     return (authContext.logged)
     ?children
-    :<Navigate to='/'></Navigate>
+    :<Navigate to='/login'></Navigate>
 }
