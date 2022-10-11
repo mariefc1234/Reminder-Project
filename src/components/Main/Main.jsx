@@ -1,7 +1,8 @@
-import React from 'react'
+/* eslint-disable import/prefer-default-export */
+import React from 'react';
 
-export const Main = () => {
+export function Main() {
   return (
-    <div>Main</div>
-  )
+    <div>main</div>
+  );
 }

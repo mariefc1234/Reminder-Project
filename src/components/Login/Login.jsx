@@ -20,8 +20,8 @@ export function Login() {
         fetch('http://localhost:8080/api/auth', {
         method: 'POST',
         body: JSON.stringify({
-            email: formValues.email,
-            password: formValues.password,
+          email: formValues.email,
+          password: formValues.password,
         }),
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
     })
@@ -33,8 +33,8 @@ export function Login() {
         if (isLogged) {
             authContext.setLogged(true);
         } else {
-            // eslint-disable-next-line no-alert
-            alert('usuario no existe');
+             // eslint-disable-next-line no-alert
+             alert('usuario no existe');
         }
     });
     };
