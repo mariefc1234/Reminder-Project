@@ -34,24 +34,24 @@ export function Login() {
             authContext.setLogged(true);
         } else {
              // eslint-disable-next-line no-alert
-             alert('usuario no existe');
+            alert('usuario no existe');
         }
     });
     };
   return (
     <div className="center">
       <h1>¡Bienvenido!</h1>
-      <form method="post">
+      <form>
         <div className="txt_field">
-          <input type="text" name="email" id="email" required />
+          <input type="text" name="email" id="email" onChange={handleInputChange} required />
           <label> Correo Electrónico</label>
         </div>
         <div className="txt_field">
-          <input type="password" name="password" id="password" required />
+          <input type="password" name="password" id="password" onChange={handleInputChange} required />
           <label>Contraseña</label>
         </div>
         <div className="pass">¿Olvidaste la contraseña?</div>
-        <input type="submit" value="Login" />
+        <input type="submit" value="Login" onClick={handleLogin} />
         <div className="signup_link">
           Aún no eres miembro?
           <a href="#"> Regístrate</a>
