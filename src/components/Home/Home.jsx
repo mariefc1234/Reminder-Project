@@ -1,52 +1,76 @@
-/* eslint-disable jsx-a11y/alt-text */
+/* eslint-disable object-curly-newline */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable import/prefer-default-export */
-import React from 'react';
-import './Home.css';
 
-import iconImg from '../../img/icon.png';
-// import menuImg from '../../img/menu.svg';
-import homeImg from '../../img/HomeImg.png';
+import React, { useState } from 'react';
+import './Home.css';
+import { FaBars, FaTimes, FaSun } from 'react-icons/fa';
+import iconImg from '../../img/logo.png';
+import homeImg from '../../img/home.png';
 
 export function Home() {
-    return (
-      <div className="container">
-        <nav className="navbar navbar-expand-lg">
+  const [isLight, setisLight] = useState(true);
+  const hangleLightChange = (e) => {
+    e.preventDefault();
+    setisLight(!(isLight));
+  };
 
-          <a className="navbar-brand navbar__logo" href="#">
-            <img src={iconImg} />
-            <p className="navbar__logo__text">  Lifestyle Reminder </p>
-          </a>
+  const navRef = useState();
 
-          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon" />
-          </button>
-
-          <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
-              <a className="nav-link" href="#">Pestaña 1</a>
-              <a className="nav-link" href="#">Pestaña 2</a>
+  const showNavbar = () => {
+    navRef.current.classList.toggle('responsive_nav');
+  };
+  return (
+    <div>
+      <div className={(isLight) ? 'big-wrapper light' : 'big-wrapper dark'}>
+        <header>
+          <div className="container">
+            <div className="logo">
+              <img src={iconImg} alt="Logo" />
+              <h3>Reminder for your life</h3>
+            </div>
+            <nav ref={navRef}>
+              <a href="/#">Home</a>
+              <a href="/#">About Us</a>
+              <a href="/#">Contact Us</a>
+              <a href="#" className="btn">Sign up</a>
+              <button className="nav-btn nav-close-btn" onClick={showNavbar} type="button">
+                <FaTimes />
+              </button>
+            </nav>
+            <button className="nav-btn" onClick={showNavbar} type="button">
+              <FaBars />
+            </button>
+          </div>
+        </header>
+        <div className="showcase-area">
+          <div className="container">
+            <div className="left">
+              <div className="big-title">
+                <h1>Reminder for your life,</h1>
+                <h1>Reminder for your habits.</h1>
+              </div>
+              <p className="text">
+                Take care of your health while you work!
+              </p>
+              <div className="button_div">
+                <a href="#" className="btn">Get started</a>
+              </div>
+            </div>
+            <div className="right">
+              <img src={homeImg} alt="Home" className="homeImage" />
             </div>
           </div>
-
-        </nav>
-
-        <div className="info">
-
-          <div className="info__text">
-            <h1 className="info__text__title"> Reminder </h1>
-            <h2 className="info__text__sub"> Cuida tu salud mientras trabajas </h2>
-            <p className="info__text__p">  Tu salud es importante, por eso es indispensable este reminder :) </p>
-            <input className="info__btn" type="button" value="Iniciar Sesion" />
-          </div>
-
-          <div className="info__img">
-            <img src={homeImg} />
-          </div>
-
         </div>
 
-        <div className="circle" />
+        <div className="bottom-area">
+          <div className="container">
+            <button className="toggle-btn" type="button" onClick={hangleLightChange}>
+              <FaSun className="far fa-sun" />
+            </button>
+          </div>
+        </div>
       </div>
-    );
+    </div>
+  );
 }

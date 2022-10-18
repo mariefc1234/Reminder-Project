@@ -40,21 +40,21 @@ export function Login() {
     };
   return (
     <div className="center">
-      <h1>¡Bienvenido!</h1>
+      <h1>Sign In</h1>
       <form>
         <div className="txt_field">
           <input type="text" name="email" id="email" onChange={handleInputChange} required />
-          <label> Correo Electrónico</label>
+          <label>Email</label>
         </div>
         <div className="txt_field">
           <input type="password" name="password" id="password" onChange={handleInputChange} required />
-          <label>Contraseña</label>
+          <label>Password</label>
         </div>
-        <div className="pass">¿Olvidaste la contraseña?</div>
+        <div className="pass">Forgot Password?</div>
         <input type="submit" value="Login" onClick={handleLogin} />
         <div className="signup_link">
-          Aún no eres miembro?
-          <a href="#"> Regístrate</a>
+          Not a member?
+          <a href="#"> Sign up now</a>
         </div>
       </form>
     </div>

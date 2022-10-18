@@ -5,24 +5,24 @@ import './Register.css';
 export function Register() {
   return (
     <div className="container">
-      <div className="title">Crear cuenta</div>
+      <div className="title">Create Account</div>
       <form action="#">
         <div className="user-details">
           <div className="input-box-one">
-            <span className="details">Correo Electrónico</span>
-            <input type="text" placeholder="Ingresa tu correo electrónico" required />
+            <span className="details">Email</span>
+            <input type="text" placeholder="Email" required />
           </div>
           <div className="input-box">
-            <span className="details">Contraseña</span>
-            <input type="password" placeholder="Contraseña" required />
+            <span className="details">Password</span>
+            <input type="password" placeholder="Password" required />
           </div>
           <div className="input-box">
-            <span className="details">Confirma la contraseña</span>
-            <input type="password" placeholder="Confirma la contraseña" required />
+            <span className="details">Confirm password</span>
+            <input type="password" placeholder="Confirm password" required />
           </div>
         </div>
         <div className="button">
-          <input type="submit" value="Crear Cuenta" />
+          <input type="submit" value="Create Account" />
         </div>
       </form>
     </div>
