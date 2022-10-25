@@ -27,9 +27,9 @@ export function Login() {
     })
     .then((response) => response.json())
     .then((json) => {
-        const isLogged = json.data.logged;
         // eslint-disable-next-line no-console
         console.log(json);
+        const isLogged = json.userData.logged;
         if (isLogged) {
             authContext.setLogged(true);
         } else {
