@@ -1,0 +1,139 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+	font-family: "Poppins", sans-serif;
+}
+
+:root {
+	--mainColor: #EF8E61;
+  --hoverColor: #ee8352;
+  --backgroundColor: #f1f8fc;
+  --darkOne: #312f3a;
+  --darkTwo: #45424b;
+  --lightOne: #919191;
+  --lightTwo: #aaa;
+}
+
+header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	height: 80px;
+	padding: 0 2rem;
+	background-color: var(--backgroundColor);
+}
+
+nav a {
+	margin: 0 1rem;
+	color: var(--lightTwo);
+	text-decoration: none;
+	display: inline-block;
+	transition: 0.3s;
+	margin: 0 2rem;
+}
+
+nav a:hover {
+	color: var(--hoverColor);
+}
+
+header .nav-btn {
+	padding: 5px;
+	cursor: pointer;
+	background: transparent;
+	border: none;
+	outline: none;
+	color: var(--textColor);
+	visibility: hidden;
+	opacity: 0;
+	font-size: 1.8rem;
+}
+
+header div,
+nav {
+	display: flex;
+	align-items: center;
+}
+
+.btn-signup {
+	display: inline-block;
+	padding: 0.9rem 1.9rem;
+	color: #fff !important;
+	background-color: var(--mainColor);
+	border-radius: 16px;
+	text-transform: capitalize;
+	transition: 0.3s;
+}
+
+.btn-signup:hover {
+	background-color: var(--hoverColor);
+	transform: scale(1) !important;
+}
+
+.logo {
+	display: flex;
+	align-items: center;
+	cursor: pointer;
+}
+
+.logo img {
+	width: 45px;
+	margin-right: 0.6rem;
+	margin-top: -0.6rem;
+}
+
+.logo a {
+	color: var(--darkTwo);
+	font-size: 1.55rem;
+	text-decoration: none;
+	line-height: 1.2;
+	font-weight: 600;
+}
+
+
+@media screen and (max-width: 1024px) {
+	header .nav-btn {
+		visibility: visible;
+		opacity: 1;
+	}
+
+	header nav {
+		position: fixed;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		gap: 1.5rem;
+		background-color: var(--mainColor);
+		transition: 1s;
+		transform: translateX(100vh);
+	}
+
+	header .responsive_nav {
+		transform: none;
+	}
+
+	nav .nav-close-btn {
+		position: absolute;
+		top: 2rem;
+		right: 2rem;
+		color: #fff;
+	}
+
+	nav a {
+		font-size: 1.5rem;
+		color: #fff;
+		margin-left: 0;
+		padding: 0.5rem 0;
+	}
+
+	.logo a {
+		font-size: 1rem;
+	}
+}
