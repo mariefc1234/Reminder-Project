@@ -1,16 +1,17 @@
+/* eslint-disable import/named */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable no-unused-vars */
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Login } from '../components/Login/Login';
+import { Signin } from '../components/Signin/Signin';
 import { Home } from '../components/Home/Home';
 import { AuthProvider, context } from '../context/authContext';
 // import { ModalProvider } from '../context/modalContext';
 import { ProtectedRoutes } from './ProtectedRoutes';
 import { PublicRoutes } from './PublicRoutes';
 import { Main } from '../components/Main/Main';
-import { Register } from '../components/Register/Register';
-import { UserInfoForm } from '../components/UserInfoForm/UserInfoForm';
+import { Signup } from '../components/Signup/Signup';
+import { UserInfoRegister } from '../components/UserInfoRegister/UserInfoRegister';
 
 export function AppRouter() {
     return (
@@ -34,26 +35,26 @@ export function AppRouter() {
               )}
             />
             <Route
-              path="/login"
+              path="/signin"
               element={(
                 <PublicRoutes>
-                  <Login />
+                  <Signin />
                 </PublicRoutes>
               )}
             />
             <Route
-              path="/register"
+              path="/signup"
               element={(
                 <PublicRoutes>
-                  <Register />
+                  <Signup />
                 </PublicRoutes>
                           )}
             />
             <Route
-              path="/userinfoform"
+              path="/userinforegister"
               element={(
                 <PublicRoutes>
-                  <UserInfoForm />
+                  <UserInfoRegister />
                 </PublicRoutes>
                           )}
             />

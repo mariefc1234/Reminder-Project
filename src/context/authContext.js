@@ -7,8 +7,12 @@ export const context = createContext();
 
 export function AuthProvider({ children }) {
     const [logged, setLogged] = useState(false);
+    const [token, setToken] = useState(false);
     return (
-      <context.Provider value={{ logged, setLogged }}>
+      <context.Provider value={{
+ logged, setLogged, token, setToken,
+}}
+      >
         {children}
       </context.Provider>
     );

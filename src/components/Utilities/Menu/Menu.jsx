@@ -4,7 +4,7 @@ import { FaBars, FaTimes } from 'react-icons/fa';
 import './Menu.css';
 import iconImg from '../../../img/logo.png';
 
-export function Menu() {
+function Menu() {
   const navRef = useRef();
 
   const showNavbar = () => {
@@ -29,21 +29,6 @@ export function Menu() {
         </button>
       </nav>
     </header>
-    // <header>
-    //   <div className="container">
-    //     <nav ref={navRef}>
-    //       <a href="/#">Healthy Tips</a>
-    //       <a href="/#">About Us</a>
-    //       <a href="/#">Contact Us</a>
-    //       <a href="#" className="btn">Sign up</a>
-    //       <button className="nav-btn nav-close-btn" onClick={showNavbar} type="button">
-    //         <FaTimes />
-    //       </button>
-    //     </nav>
-    //     <button className="nav-btn" onClick={showNavbar} type="button">
-    //       <FaBars />
-    //     </button>
-    //   </div>
-    // </header>
   );
 }
+export default Menu;
