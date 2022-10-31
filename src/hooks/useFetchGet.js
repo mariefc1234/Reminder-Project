@@ -12,7 +12,12 @@ export const useFetchGet = (url, token) => {
     useEffect(() => {
         setState({ data: null, loading: true, error: null });
 
-        fetch(url)
+        fetch(url, {
+            headers: {
+                'Content-type': 'application/json; charset=UTF-8',
+                authtoken: token,
+            },
+        })
             .then((resp) => resp.json())
             .then((data) => {
                 if (isMounted.current) {

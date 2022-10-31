@@ -5,6 +5,11 @@ import './UserInfoRegister.css';
 import Menu from '../Utilities/Menu/Menu';
 
 export function UserInfoRegister() {
+//   const initialForm = {
+//     weight: '',
+//     Heights: '',
+// };
+
   return (
     <div className="userinfo-wrapper">
       <Menu />

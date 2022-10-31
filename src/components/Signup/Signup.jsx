@@ -11,6 +11,7 @@ import { context } from '../../context/authContext';
 export function Signup() {
   const authContext = useContext(context);
   const initialForm = {
+    username: '',
     email: '',
     password: '',
     confPassword: '',
@@ -21,16 +22,18 @@ export function Signup() {
     const res = await fetch('http://localhost:8080/api/auth/register', {
       method: 'POST',
       body: JSON.stringify({
+        username: formValues.username,
         email: formValues.email,
         password: formValues.password,
       }),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
     const resJSON = await res.json();
-    const isRegistered = resJSON.data.registered;
+    console.log(resJSON);
+    const isRegistered = resJSON.token;
     if (isRegistered) {
       authContext.setLogged(true);
-      authContext.setToken(resJSON.headers.authtoken);
+      authContext.setToken(resJSON.token);
     } else {
       // eslint-disable-next-line no-alert
       Swal.fire({

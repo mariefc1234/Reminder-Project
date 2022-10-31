@@ -28,9 +28,22 @@ export function Signin() {
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
     const resJSON = await res.json();
+
+    if (!resJSON.ok) {
+      Swal.fire({
+        title: 'Error',
+        text: 'Invalid Data',
+        icon: 'error',
+      });
+
+      return;
+    }
+
     const isLogged = resJSON.userData.logged;
+
     if (isLogged) {
-      authContext.setLogged(true);
+      await authContext.setLogged(true);
+      await authContext.setToken(resJSON.token);
     } else {
       // eslint-disable-next-line no-alert
       Swal.fire({
