@@ -53,9 +53,9 @@ export function AppRouter() {
             <Route
               path="/userinforegister"
               element={(
-                <PublicRoutes>
+                <ProtectedRoutes>
                   <UserInfoRegister />
-                </PublicRoutes>
+                </ProtectedRoutes>
                           )}
             />
           </Routes>

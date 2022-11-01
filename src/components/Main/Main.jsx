@@ -3,7 +3,7 @@
 /* eslint-disable nonblock-statement-body-position */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/prefer-default-export */
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
@@ -15,12 +15,11 @@ export function Main() {
 
     const { data, loading, error } = useFetchGet('http://localhost:8080/api/user', authContext.token);
 
-    useState(() => {
-      if (data == null)
-        return;
-
-      if (data.userData.isregistered === 0) {
-        navigate('/userinforegister');
+    useEffect(() => {
+      if (data) {
+        if (data.userData.isregistered === 0) {
+          navigate('/userinforegister', { replace: true });
+        }
       }
     }, [data]);
 

@@ -1,14 +1,18 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import './Signup.css';
 import Swal from 'sweetalert2';
+import PasswordChecklist from 'react-password-checklist';
 import Menu from '../Utilities/Menu/Menu';
 import { useForm } from '../../hooks/useForm';
 import { context } from '../../context/authContext';
 
 // eslint-disable-next-line import/prefer-default-export
 export function Signup() {
+  const [password, setPassword] = useState('');
+  const [passwordAgain, setPasswordAgain] = useState('');
+  const [disableBtn, setDisableBtn] = useState(true);
   const authContext = useContext(context);
   const initialForm = {
     username: '',
@@ -24,7 +28,7 @@ export function Signup() {
       body: JSON.stringify({
         username: formValues.username,
         email: formValues.email,
-        password: formValues.password,
+        password,
       }),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
@@ -43,6 +47,7 @@ export function Signup() {
       });
     }
   };
+
   return (
     <div className="signup-wrapper">
       <Menu />
@@ -62,14 +67,29 @@ export function Signup() {
           </div>
           <div className="signup-input-box">
             <label htmlFor="password">Password</label>
-            <input type="password" placeholder="Password" id="password" name="password" className="signup-input" onChange={handleInputChange} required />
+            <input type="password" placeholder="Password" id="password" name="password" className="signup-input" onChange={(e) => setPassword(e.target.value)} required />
           </div>
           <div className="signup-input-box">
             <label htmlFor="confPass">Confirm password</label>
-            <input type="password" placeholder="Confirm password" id="confPass" name="confPassword" className="signup-input" onChange={handleInputChange} required />
+            <input type="password" placeholder="Confirm password" id="confPass" name="confPassword" className="signup-input" onChange={(e) => setPasswordAgain(e.target.value)} required />
           </div>
+          <PasswordChecklist
+            className="pw-list"
+            rules={['minLength', 'lowercase', 'specialChar',
+                        'number', 'capital', 'match']}
+            minLength={8}
+            value={password}
+            valueAgain={passwordAgain}
+            onChange={(isValid) => {
+              if (isValid) {
+                setDisableBtn(false);
+              } else {
+                setDisableBtn(true);
+              }
+            }}
+          />
           <div className="signup-button">
-            <input type="submit" value="Create Account" onClick={handleRegister} />
+            <input type="submit" value="Create Account" disabled={disableBtn} onClick={handleRegister} />
           </div>
         </form>
       </div>

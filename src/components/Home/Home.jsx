@@ -4,10 +4,12 @@
 
 import React from 'react';
 import './Home.css';
+import { useNavigate } from 'react-router-dom';
 import homeImg from '../../img/home.png';
 import Menu from '../Utilities/Menu/Menu';
 
 export function Home() {
+  const navigate = useNavigate();
   return (
     <div className="home-container">
       <Menu />
@@ -20,7 +22,7 @@ export function Home() {
           <p className="text-home">
             Take care of your health while you work!
           </p>
-          <a href="#" className="btn-getstarted">Get started</a>
+          <a href="#" className="btn-getstarted" onClick={() => navigate('/signup')}>Get started</a>
         </div>
         <div className="right-home">
           <img src={homeImg} alt="Home" className="homeImage" />
