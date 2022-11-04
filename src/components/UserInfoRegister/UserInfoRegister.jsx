@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './UserInfoRegister.css';
 import Menu from '../Utilities/Menu/Menu';
 
@@ -9,7 +10,7 @@ export function UserInfoRegister() {
 //     weight: '',
 //     Heights: '',
 // };
-
+const navigate = useNavigate();
   return (
     <div className="userinfo-wrapper">
       <Menu />
@@ -58,16 +59,17 @@ export function UserInfoRegister() {
                 <span className="dot four" />
                 <span className="selection">I do not exercise</span>
               </label>
-              <label htmlFor="dot-6">
-                <span className="dot six" />
+              <label htmlFor="dot-5">
+                <span className="dot five" />
                 <span className="selection">Twice a week</span>
               </label>
-              <label htmlFor="dot-7">
-                <span className="dot seven" />
+              <label htmlFor="dot-6">
+                <span className="dot six" />
                 <span className="selection">Three or more times per week</span>
               </label>
             </div>
           </div>
+          <button className="user-info-register-continue" type="button" onClick={() => navigate('/main')}>Continue</button>
         </form>
       </div>
     </div>

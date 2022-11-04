@@ -4,13 +4,14 @@
 /* eslint-disable import/prefer-default-export */
 import React, { useContext } from 'react';
 import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 import { context } from '../../context/authContext';
 import './Signin.css';
 import { useForm } from '../../hooks/useForm';
 import Menu from '../Utilities/Menu/Menu';
-import { useFetchPost } from '../../hooks/useFetchPost';
 
 export function Signin() {
+  const navigate = useNavigate();
   const authContext = useContext(context);
   const initialForm = {
       email: '',
@@ -70,13 +71,13 @@ export function Signin() {
             <label htmlFor="password">Password</label>
             <input type="password" placeholder="Password" id="password" className="signin-input" name="password" onChange={handleInputChange} required />
           </div>
-          <div className="forgot-password">Forgot Password?</div>
-          <div className="signup-button">
+          <a href="" className="forgot-password" onClick={() => navigate('/forgotpassword')}>Forgot Password?</a>
+          <div className="signin-button">
             <input type="submit" value="Login" onClick={handleLogin} />
           </div>
           <div className="signup_link">
             Not a member?
-            <a href="#"> Sign up now</a>
+            <a href="#" onClick={() => navigate('/signup')}> Sign up now</a>
           </div>
         </form>
       </div>

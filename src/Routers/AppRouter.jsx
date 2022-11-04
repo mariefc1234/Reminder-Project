@@ -12,6 +12,8 @@ import { PublicRoutes } from './PublicRoutes';
 import { Main } from '../components/Main/Main';
 import { Signup } from '../components/Signup/Signup';
 import { UserInfoRegister } from '../components/UserInfoRegister/UserInfoRegister';
+import { ForgotPassword } from '../components/Utilities/ForgotPassword/ForgotPassword';
+import { ConfigureReminder } from '../components/ConfigureReminder/ConfigureReminder';
 
 export function AppRouter() {
     return (
@@ -56,6 +58,22 @@ export function AppRouter() {
                 <ProtectedRoutes>
                   <UserInfoRegister />
                 </ProtectedRoutes>
+                          )}
+            />
+            <Route
+              path="/forgotpassword"
+              element={(
+                <PublicRoutes>
+                  <ForgotPassword />
+                </PublicRoutes>
+                          )}
+            />
+            <Route
+              path="/configurereminder"
+              element={(
+                <PublicRoutes>
+                  <ConfigureReminder />
+                </PublicRoutes>
                           )}
             />
           </Routes>

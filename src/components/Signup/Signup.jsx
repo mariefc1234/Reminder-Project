@@ -33,7 +33,7 @@ export function Signup() {
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
     const resJSON = await res.json();
-    console.log(resJSON);
+    // console.log(resJSON);
     const isRegistered = resJSON.token;
     if (isRegistered) {
       authContext.setLogged(true);

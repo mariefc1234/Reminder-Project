@@ -8,15 +8,12 @@
     --darkTwo: #45424b;
     --lightOne: #919191;
     --lightTwo: #aaa;
+    --disabled: #f9bca0;
 }
 
 .stop-scrolling {
     height: 100%;
     overflow: hidden;
-}
-
-img {
-    width: 100%;
 }
 
 .home-container{

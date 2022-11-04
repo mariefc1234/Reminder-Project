@@ -1,0 +1,83 @@
+
+.configure-reminder-container{
+  margin: 0;
+  padding: 0;
+  background: #f1f8fc;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.configure-reminder-center{
+  font-family: 'Poppins', sans-serif;
+  max-width:500px;
+  background-color: #fff;
+  box-shadow: 7px 6px 8px -1px rgba(0,0,0,0.2);
+  padding: 25px 30px;
+  border-radius: 5px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;;
+}
+
+.configure-reminder-title{
+  font-size: 2rem;
+  text-transform: capitalize;
+  line-height: 1.4;
+  color: #EF8E61;
+  margin: auto;
+}
+
+.configure-reminder-input{
+  height: 35px;
+  width: 100%;
+  outline: none;
+  font-size: 16px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  border-bottom-width: 2px;
+  transition: all 0.3s ease;
+  margin-bottom: 25px;
+}
+.configure-reminder-input:focus,
+.configure-reminder-input:valid{
+    border-color: #9b59b6;
+}
+
+
+.configure-reminder-btn{
+  height: 40px;
+  margin: auto;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--mainColor);
+}
+
+.configure-reminder-btn:hover{
+  background-color: var(--hoverColor);
+}
+
+.configure-reminder-image-box{
+  height: 150px;
+}
+
+.configure-reminder-image{
+  height: 120px;
+}
+
+@media screen and (max-width: 1023px){
+  .configure-reminder-center{
+    width: 80%;
+  }
+
+  .configure-reminder-title{
+    font-size: 1.7rem;
+  }
+}

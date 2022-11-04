@@ -11,6 +11,7 @@
 }
 
 header {
+	z-index: 70;
 	font-family: "Poppins", sans-serif;
 	display: flex;
 	align-items: center;
@@ -51,7 +52,7 @@ nav {
 	align-items: center;
 }
 
-.btn-signup {
+.btn-signin {
 	display: inline-block;
 	padding: 0.9rem 1.9rem;
 	color: #fff !important;
@@ -61,7 +62,7 @@ nav {
 	transition: 0.3s;
 }
 
-.btn-signup:hover {
+.btn-signin:hover {
 	background-color: var(--hoverColor);
 	transform: scale(1) !important;
 }
@@ -87,7 +88,7 @@ nav {
 }
 
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1023px) {
 	header .nav-btn {
 		visibility: visible;
 		opacity: 1;

@@ -46,7 +46,7 @@
 }
 
 .signin-input-box{
-  margin-top: 15px;
+  margin-bottom: 15px;
 }
 
 .signin-input-box label{
@@ -66,61 +66,60 @@
 }
 .signin-input:focus,
 .signin-input:valid{
-    border-color: #9b59b6;
+    border-color: var(--hoverColor);
 }
 
-.signin-form .signin-button{
-    height: 45px;
-    margin: 35px;
+.signin-button{
+  height: 45px;
+  margin: 25px;
 }
 
 .signin-button input{
-    height: 100%;
-    width: 100%;
-    border-radius: 10px;
-    border: none;
-    color: #fff;
-    font-size: 18px;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background: var(--mainColor);
+  height: 100%;
+  width: 100%;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  font-size: 18px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: var(--mainColor);
 }
 
 .signin-button input:hover{
-    background-color: var(--hoverColor);
+  background-color: var(--hoverColor);
 }
 
 .forgot-password{
-    margin: 5px 0 20px 0px;
-    color: #a6a6a6;
-    cursor: pointer;
-    font-size: 15px;
+  color: #a6a6a6;
+  cursor: pointer;
+  font-size: 15px;
 }
 
 .forgot-password:hover{
-    color: #ee8352;
-    text-decoration: underline;
+  color: #ee8352;
+  text-decoration: underline;
 }
 
 @media screen and (max-width: 1024px){
-    .signin-body-container{
-        max-width: 80%;
-        margin-top: 0px;
-    }
-    
-    .signin-form .signin-input-box{
-        margin-bottom: 15px;
-        width: 100%;
-    }
+  .signin-body-container{
+    max-width: 80%;
+    margin-top: 0px;
+  }
+  
+  .signin-form .signin-input-box{
+    margin-bottom: 15px;
+    width: 100%;
+  }
 
-    .content .signin-form {
-        max-height: 300px;
-        overflow-y: scroll;
-    }
-    ::-webkit-scrollbar{
-        width: 5px;
-    }
+  .content .signin-form {
+    max-height: 300px;
+    overflow-y: scroll;
+  }
+  ::-webkit-scrollbar{
+    width: 5px;
+  }
 }
