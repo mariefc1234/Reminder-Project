@@ -11,7 +11,6 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import reminderImg from '../../img/glass.jpeg';
-import './ConfigureReminder.css';
 
 export function ConfigureReminder() {
   const navigate = useNavigate();

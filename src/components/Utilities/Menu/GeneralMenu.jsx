@@ -6,18 +6,17 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useNavigate } from 'react-router-dom';
 import iconImg from '../../../img/logo.png';
 
-// const pages = ['Healthy Tips', 'About Us', 'Contact Us'];
-const pages = [
-  { title: 'Healthy Tips', ref: '/healthytips' },
-  { title: 'About Us', ref: '/aboutus' },
-  { title: 'Contact Us', ref: '/contactus' },
+const pagesG = [
+  { id: 1, title: 'Healthy Tips', ref: '/healthytips' },
+  { id: 2, title: 'About Us', ref: '/aboutus' },
+  { id: 3, title: 'Contact Us', ref: '/contactus' },
+  { id: 4, title: 'Sign In', ref: '/signin' },
 ];
 
-const pagesG = [
-  { title: 'Healthy Tips', ref: '/healthytips' },
-  { title: 'About Us', ref: '/aboutus' },
-  { title: 'Contact Us', ref: '/contactus' },
-  { title: 'Sign In', ref: '/signin' },
+const pages = [
+  { id: 5, title: 'Healthy Tips', ref: '/healthytips' },
+  { id: 6, title: 'About Us', ref: '/aboutus' },
+  { id: 7, title: 'Contact Us', ref: '/contactus' },
 ];
 
 function GeneralMenu() {
@@ -54,7 +53,7 @@ function GeneralMenu() {
             {pages.map((page) => (
               <Button
                 variant="menuButton"
-                key={page}
+                key={page.id}
                 onClick={() => navigate(page.ref)}
                 sx={{ my: 2, display: 'block' }}
                 href=""
@@ -93,7 +92,7 @@ function GeneralMenu() {
               }}
             >
               {pagesG.map((page) => (
-                <MenuItem key={page} onClick={() => navigate(page.ref)}>
+                <MenuItem key={page.id} onClick={() => navigate(page.ref)}>
                   <Typography textAlign="center">{page.title}</Typography>
                 </MenuItem>
               ))}

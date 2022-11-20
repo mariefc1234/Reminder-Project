@@ -5,6 +5,7 @@ import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
+import { useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -13,10 +14,21 @@ import MenuItem from '@mui/material/MenuItem';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import iconImg from '../../../img/logo.png';
 
-const pages = ['Healthy Tips', 'About Us', 'Contact Us'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = [
+  { id: 1, title: 'Profile', ref: '/healthytips' },
+  { id: 2, title: 'Account', ref: '/aboutus' },
+  { id: 3, title: 'Dashboard', ref: '/contactus' },
+  { id: 4, title: 'Logout', ref: '/signin' },
+];
+
+const pages = [
+  { id: 5, title: 'Healthy Tips', ref: '/healthytips' },
+  { id: 6, title: 'About Us', ref: '/aboutus' },
+  { id: 7, title: 'Contact Us', ref: '/contactus' },
+];
 
 function UserMenu() {
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -86,8 +98,8 @@ function UserMenu() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                <MenuItem key={page.id} onClick={() => navigate(page.ref)}>
+                  <Typography textAlign="center">{page.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -113,11 +125,11 @@ function UserMenu() {
             {pages.map((page) => (
               <Button
                 variant="menuButton"
-                key={page}
-                onClick={handleCloseNavMenu}
+                key={page.id}
+                onClick={() => navigate(page.ref)}
                 sx={{ my: 2, display: 'block' }}
               >
-                {page}
+                {page.title}
               </Button>
             ))}
           </Box>
@@ -145,8 +157,8 @@ function UserMenu() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting.id} onClick={() => navigate(setting.ref)}>
+                  <Typography textAlign="center">{setting.title}</Typography>
                 </MenuItem>
               ))}
             </Menu>

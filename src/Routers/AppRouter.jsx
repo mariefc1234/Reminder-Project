@@ -1,13 +1,10 @@
-/* eslint-disable import/named */
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable no-unused-vars */
 import React from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { DefaultTheme } from '../components/Utilities/Theme/DefaultTheme';
 import { Signin } from '../components/Signin/Signin';
 import { Home } from '../components/Home/Home';
-import { AuthProvider, context } from '../context/authContext';
+import { AuthProvider } from '../context/authContext';
 // import { ModalProvider } from '../context/modalContext';
 import { ProtectedRoutes } from './ProtectedRoutes';
 import { PublicRoutes } from './PublicRoutes';
