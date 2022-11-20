@@ -1,9 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/prefer-default-export */
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './UserInfoRegister.css';
-import Menu from '../Utilities/Menu/Menu';
+import {
+  Button, Card, CardContent, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, InputLabel, Radio, RadioGroup, TextField, Typography,
+} from '@mui/material';
+import UserMenu from '../Utilities/Menu/UserMenu';
 
 export function UserInfoRegister() {
 //   const initialForm = {
@@ -11,67 +14,91 @@ export function UserInfoRegister() {
 //     Heights: '',
 // };
 const navigate = useNavigate();
+
+const [gender, setGender] = React.useState('');
+const [activity, setActivity] = React.useState('');
+const handleGenderChange = (event) => {
+  setGender(event.target.value);
+};
+const handleActivityChange = (event) => {
+  setActivity(event.target.value);
+};
+
   return (
-    <div className="userinfo-wrapper">
-      <Menu />
-      <div className="userinfo-body-container">
-        <form action="#" className="userinfo-form">
-          <div className="userinfo-title">
-            <label>Tell us more about you</label>
-            <div className="userinfo-title-divider" />
-          </div>
-          <div className="userinfo-input-box">
-            <label htmlFor="weight">Weight</label>
-            <input type="text" placeholder="Weight" id="weight" className="userinfo-input" required />
-          </div>
-          <div className="userinfo-input-box">
-            <label htmlFor="height">Height</label>
-            <input type="text" placeholder="Height" id="height" className="userinfo-input" required />
-          </div>
-          <div className="selection-details">
-            <span className="selection-title">Gender</span>
-            <input type="radio" name="selection" id="dot-l" />
-            <input type="radio" name="selection" id="dot-2" />
-            <input type="radio" name="selection" id="dot-3" />
-            <div className="category">
-              <label htmlFor="dot-l">
-                <span className="dot one" />
-                <span className="selection">Male</span>
-              </label>
-              <label htmlFor="dot-2">
-                <span className="dot two" />
-                <span className="selection">Female</span>
-              </label>
-              <label htmlFor="dot-3">
-                <span className="dot three" />
-                <span className="selection">Dont specify</span>
-              </label>
-            </div>
-          </div>
-          <div className="selection-details">
-            <span className="selection-title">How often do you exercise?</span>
-            <input type="radio" name="selection" id="dot-4" />
-            <input type="radio" name="selection" id="dot-5" />
-            <input type="radio" name="selection" id="dot-6" />
-            <input type="radio" name="selection" id="dot-7" />
-            <div className="category">
-              <label htmlFor="dot-4">
-                <span className="dot four" />
-                <span className="selection">I do not exercise</span>
-              </label>
-              <label htmlFor="dot-5">
-                <span className="dot five" />
-                <span className="selection">Twice a week</span>
-              </label>
-              <label htmlFor="dot-6">
-                <span className="dot six" />
-                <span className="selection">Three or more times per week</span>
-              </label>
-            </div>
-          </div>
-          <button className="user-info-register-continue" type="button" onClick={() => navigate('/main')}>Continue</button>
-        </form>
-      </div>
+    <div>
+      <UserMenu />
+      <Grid>
+        <Card style={{ maxWidth: 650, padding: '20px 5px', margin: '0 auto' }}>
+          <CardContent>
+            <Typography gutterBottom variant="h5" align="center" sx={{ fontWeight: '500' }}> Tell us more about you </Typography>
+            <form>
+              <Grid container spacing={1}>
+                <Grid item xs={12} md={6}>
+                  <InputLabel htmlFor="weight">Weight*</InputLabel>
+                  <TextField
+                    fullWidth
+                    id="weight"
+                    helperText="Please select your weight"
+                    type="number"
+                    InputProps={{
+                      inputProps: { max: 200, min: 0 },
+                      startAdornment: <InputAdornment position="start">kg</InputAdornment>,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12} md={6}>
+                  <InputLabel htmlFor="height">Height*</InputLabel>
+                  <TextField
+                    fullWidth
+                    id="weight"
+                    helperText="Please select your height"
+                    type="number"
+                    InputProps={{
+                      inputProps: { max: 200, min: 0 },
+                      startAdornment: <InputAdornment position="start">cm</InputAdornment>,
+                    }}
+                  />
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl>
+                    <FormLabel id="gender-radio-buttons-group">Gender</FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="gender-radio-buttons-group"
+                      name="controlled-radio-buttons-group"
+                      value={gender}
+                      onChange={handleGenderChange}
+                    >
+                      <FormControlLabel value="female" control={<Radio />} label="Female" />
+                      <FormControlLabel value="male" control={<Radio />} label="Male" />
+                      <FormControlLabel value="other" control={<Radio />} label="Other" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormControl>
+                    <FormLabel id="activity-radio-buttons-group">How often do you exercise?</FormLabel>
+                    <RadioGroup
+                      row
+                      aria-labelledby="activity-radio-buttons-group"
+                      name="controlled-radio-buttons-group"
+                      value={activity}
+                      onChange={handleActivityChange}
+                    >
+                      <FormControlLabel value="not" control={<Radio />} label="I don't exercise" />
+                      <FormControlLabel value="twice" control={<Radio />} label="Twice a week" />
+                      <FormControlLabel value="three" control={<Radio />} label="Three or more times per week" />
+                    </RadioGroup>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} mt={2}>
+                  <Button fullWidth type="submit" onClick={() => navigate('/main')}>Continue</Button>
+                </Grid>
+              </Grid>
+            </form>
+          </CardContent>
+        </Card>
+      </Grid>
     </div>
   );
 }

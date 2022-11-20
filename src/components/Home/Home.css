@@ -34,10 +34,8 @@
 .home-body-container {
     position: relative;
     max-width: 81rem;
-    width: 100%;
     margin: 0 auto;
-    padding: 0 3rem;
-    z-index: 10;
+    padding: 0 4rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: center;
@@ -45,6 +43,7 @@
 }
 
 .big-title-home {
+    font-family: "Poppins", sans-serif;
     font-size: 1.4rem;
     color: var(--darkOne);
     text-transform: capitalize;
@@ -92,7 +91,7 @@
         grid-template-columns: 1fr;
         justify-content: center;
         grid-gap: 2rem;
-        padding: 2.5rem 0;
+        padding: 1.5rem 1.5rem;
         max-width: 700px;
         margin: 0 auto;
     }
@@ -113,9 +112,6 @@
 }
 
 @media screen and (max-width: 470px) {
-    .home-body-container {
-        padding: 0 0.5rem;
-    }
 
     .big-title-home {
         font-size: 0.9rem;

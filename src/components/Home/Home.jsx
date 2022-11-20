@@ -6,13 +6,13 @@ import React from 'react';
 import './Home.css';
 import { useNavigate } from 'react-router-dom';
 import homeImg from '../../img/home.png';
-import Menu from '../Utilities/Menu/Menu';
+import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 
 export function Home() {
   const navigate = useNavigate();
   return (
     <div className="home-container">
-      <Menu />
+      <GeneralMenu />
       <div className="home-body-container">
         <div className="left-home">
           <div className="big-title-home">

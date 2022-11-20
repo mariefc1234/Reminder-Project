@@ -17,7 +17,7 @@ export function Main() {
 
     useEffect(() => {
       if (data) {
-        if (data.userData.isregistered === 0) {
+        if (data.data.isregistered === 0) {
           navigate('/userinforegister', { replace: true });
         }
       }
@@ -28,7 +28,7 @@ export function Main() {
         {
           (loading)
           ? <Loading />
-          : `bienvenido: ${data.userData.username}`
+          : `bienvenido: ${data.data.username}`
         }
       </div>
     );

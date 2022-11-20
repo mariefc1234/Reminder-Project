@@ -1,12 +1,19 @@
 /* eslint-disable react/react-in-jsx-scope */
-import loadingImg from '../../../img/loading.png';
-import './Loading.css';
+import { CircularProgress, Grid } from '@mui/material';
 
 export function Loading() {
     return (
-      <div className="loading-container">
-        <img src={loadingImg} alt="Yellow and funny face" className="loading-image" />
-        <p className="loading-text">Loading...</p>
+      <div>
+        <Grid
+          container
+          spacing={0}
+          direction="column"
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: '100vh' }}
+        >
+          <CircularProgress variant="indeterminate" />
+        </Grid>
       </div>
     );
 }
