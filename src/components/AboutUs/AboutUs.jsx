@@ -18,6 +18,8 @@ export function AboutUs() {
             <Typography fontSize="1.5rem">
               We are a company worried about your health, our compromise is make your life
               healthier and make your work easier.
+              We are a company worried about your health and posture, our compromise is make
+              your life healthier and your work easier.
             </Typography>
           </Grid>
           <Grid item mt={3} xs={12} display="flex" justifyContent="center" alignItems="center">

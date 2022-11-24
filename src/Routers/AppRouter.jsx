@@ -74,9 +74,9 @@ export function AppRouter() {
               <Route
                 path="/configurereminder"
                 element={(
-                  <PublicRoutes>
+                  <ProtectedRoutes>
                     <ConfigureReminder />
-                  </PublicRoutes>
+                  </ProtectedRoutes>
                             )}
               />
               <Route

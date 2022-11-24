@@ -1,28 +1,62 @@
-/* eslint-disable max-len */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable import/prefer-default-export */
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import {
-  Button, Card, CardContent, FormControl, FormControlLabel, FormLabel, Grid, InputAdornment, InputLabel, Radio, RadioGroup, TextField, Typography,
+  Button, Card, CardContent, FormControl, FormControlLabel, FormLabel, Grid,
+  InputAdornment, InputLabel, Radio, RadioGroup, TextField, Typography,
 } from '@mui/material';
 import UserMenu from '../Utilities/Menu/UserMenu';
+import { useForm } from '../../hooks/useForm';
+import { context } from '../../context/authContext';
 
 export function UserInfoRegister() {
-//   const initialForm = {
-//     weight: '',
-//     Heights: '',
-// };
-const navigate = useNavigate();
+  const authContext = useContext(context);
+  const [genre, setGender] = React.useState('');
+  const [activity, setActivity] = React.useState('');
+  const [weightError, setWeightError] = useState(false);
+  const [heightError, setHeightError] = useState(false);
 
-const [gender, setGender] = React.useState('');
-const [activity, setActivity] = React.useState('');
-const handleGenderChange = (event) => {
-  setGender(event.target.value);
-};
-const handleActivityChange = (event) => {
-  setActivity(event.target.value);
-};
+  const handleGenderChange = (event) => {
+    setGender(event.target.value);
+  };
+  const handleActivityChange = (event) => {
+    setActivity(event.target.value);
+  };
+
+  const initialForm = {
+    weight: 0,
+    height: 0,
+  };
+  const [formValues, handleInputChange] = useForm(initialForm);
+  const {
+    weight, height,
+  } = formValues;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (weight === 0) {
+      setWeightError(true);
+    }
+    if (height === 0) {
+      setHeightError(true);
+    }
+    if (activity && weight && height && activity) {
+      const res = await fetch('http://localhost:8080/api/auth/registerdata', {
+        method: 'POST',
+        body: JSON.stringify({
+        weight,
+        height,
+        genre,
+        activity,
+        }),
+        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+      });
+      const resJSON = await res.json();
+
+      const isRegistered = resJSON.ok;
+
+      if (isRegistered) {
+        window.location.href = '/main';
+      }
+    }
+  };
 
   return (
     <div>
@@ -38,10 +72,13 @@ const handleActivityChange = (event) => {
                   <TextField
                     fullWidth
                     id="weight"
+                    name="weight"
                     helperText="Please select your weight"
                     type="number"
+                    onChange={handleInputChange}
+                    error={weightError}
                     InputProps={{
-                      inputProps: { max: 200, min: 0 },
+                      inputProps: { max: 200, min: 1 },
                       startAdornment: <InputAdornment position="start">kg</InputAdornment>,
                     }}
                   />
@@ -50,11 +87,14 @@ const handleActivityChange = (event) => {
                   <InputLabel htmlFor="height">Height*</InputLabel>
                   <TextField
                     fullWidth
-                    id="weight"
+                    id="height"
+                    name="height"
                     helperText="Please select your height"
                     type="number"
+                    onChange={handleInputChange}
+                    error={heightError}
                     InputProps={{
-                      inputProps: { max: 200, min: 0 },
+                      inputProps: { max: 200, min: 1 },
                       startAdornment: <InputAdornment position="start">cm</InputAdornment>,
                     }}
                   />
@@ -66,12 +106,12 @@ const handleActivityChange = (event) => {
                       row
                       aria-labelledby="gender-radio-buttons-group"
                       name="controlled-radio-buttons-group"
-                      value={gender}
+                      value={genre}
                       onChange={handleGenderChange}
                     >
-                      <FormControlLabel value="female" control={<Radio />} label="Female" />
-                      <FormControlLabel value="male" control={<Radio />} label="Male" />
-                      <FormControlLabel value="other" control={<Radio />} label="Other" />
+                      <FormControlLabel value="F" control={<Radio />} label="Female" />
+                      <FormControlLabel value="M" control={<Radio />} label="Male" />
+                      <FormControlLabel value="O" control={<Radio />} label="Other" />
                     </RadioGroup>
                   </FormControl>
                 </Grid>
@@ -85,14 +125,14 @@ const handleActivityChange = (event) => {
                       value={activity}
                       onChange={handleActivityChange}
                     >
-                      <FormControlLabel value="not" control={<Radio />} label="I don't exercise" />
-                      <FormControlLabel value="twice" control={<Radio />} label="Twice a week" />
-                      <FormControlLabel value="three" control={<Radio />} label="Three or more times per week" />
+                      <FormControlLabel value="0" control={<Radio />} label="I don't exercise" />
+                      <FormControlLabel value="2" control={<Radio />} label="Twice a week" />
+                      <FormControlLabel value="3" control={<Radio />} label="Three or more times per week" />
                     </RadioGroup>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} mt={2}>
-                  <Button fullWidth type="submit" onClick={() => navigate('/main')}>Continue</Button>
+                  <Button fullWidth type="submit" onClick={handleSubmit}>Continue</Button>
                 </Grid>
               </Grid>
             </form>

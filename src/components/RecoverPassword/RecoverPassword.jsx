@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
   Button,
   Card, CardContent, Grid, InputLabel, TextField, Typography,

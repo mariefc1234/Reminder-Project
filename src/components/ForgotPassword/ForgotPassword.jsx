@@ -1,37 +1,37 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  Button,
-  Card, CardContent, Grid, InputLabel, TextField, Typography,
+  Button, Card, CardContent, Grid, InputLabel, TextField, Typography,
 } from '@mui/material';
 import Swal from 'sweetalert2';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { context } from '../../context/authContext';
 import { useForm } from '../../hooks/useForm';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 
 export function ForgotPassword() {
   const authContext = useContext(context);
-
+  const [emailError, setEmailError] = useState(false);
   const initialForm = {
     email: '',
   };
-  // eslint-disable-next-line no-unused-vars
-  const [formValues, handleInputChange, Reset] = useForm(initialForm);
+  const [formValues, handleInputChange] = useForm(initialForm);
   const {
     email,
   } = formValues;
 
   const handleClick = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:8080/api/email/sendPasswordConfirmation', {
+    if (email === '') {
+      setEmailError(true);
+    } else {
+      const res = await fetch('http://localhost:8080/api/email/sendPasswordConfirmation', {
       method: 'POST',
       body: JSON.stringify({
       email,
       }),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
-    const resJSON = await res.json();
 
+    const resJSON = await res.json();
     const isLogged = resJSON.data.logged;
 
     if (isLogged) {
@@ -39,10 +39,14 @@ export function ForgotPassword() {
       await authContext.setToken(resJSON.data.token);
     } else {
       Swal.fire({
-        title: 'Error',
-        text: 'Incorrect Credentials',
-        icon: 'error',
+        title: 'Email Sent',
+        confirmButtonText: 'Okay',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/signin';
+        }
       });
+    }
     }
   };
 
@@ -59,7 +63,7 @@ export function ForgotPassword() {
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="email">Email address*</InputLabel>
-                  <TextField fullWidth id="email" type="email" placeholder="Enter your email" variant="outlined" name="email" onChange={handleInputChange} required />
+                  <TextField fullWidth id="email" type="email" placeholder="Enter your email" variant="outlined" name="email" onChange={handleInputChange} error={emailError} required />
                 </Grid>
                 <Grid item xs={12} mt={2}>
                   <Button fullWidth type="submit" onClick={handleClick}>Reset password</Button>

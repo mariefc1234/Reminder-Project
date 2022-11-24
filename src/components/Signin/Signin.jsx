@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-unused-vars */
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -9,15 +8,18 @@ import {
 import { context } from '../../context/authContext';
 import { useForm } from '../../hooks/useForm';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';
+import Popup from '../Utilities/Popup';
+import { ForgotPasswordForm } from './ForgotPasswordForm';
 
 export function Signin() {
   const navigate = useNavigate();
   const authContext = useContext(context);
+  const [openPopup, setOpenPopup] = useState(false);
   const initialForm = {
       email: '',
       password: '',
   };
-  const [formValues, handleInputChange, reset] = useForm(initialForm);
+  const [formValues, handleInputChange] = useForm(initialForm);
   const {
     email, password,
   } = formValues;
@@ -64,7 +66,7 @@ export function Signin() {
                 <Grid item xs={12}>
                   <InputLabel htmlFor="password">Password*</InputLabel>
                   <TextField fullWidth id="password" type="password" placeholder="Enter your password" variant="outlined" name="password" onChange={handleInputChange} required />
-                  <Link component="button" underline="hover" variant="body2" onClick={() => navigate('/forgotpassword')} sx={{ color: 'text.secondary' }}>
+                  <Link component="button" underline="hover" variant="body2" onClick={() => navigate('/signup')} sx={{ color: 'text.secondary' }}>
                     Forgot Password?
                   </Link>
                 </Grid>
@@ -83,6 +85,13 @@ export function Signin() {
           </CardContent>
         </Card>
       </Grid>
+      <Popup
+        title="Forgot password?"
+        openPopup={openPopup}
+        setOpenPopup={setOpenPopup}
+      >
+        <ForgotPasswordForm />
+      </Popup>
     </div>
   );
 }

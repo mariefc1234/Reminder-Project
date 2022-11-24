@@ -1,4 +1,4 @@
-/* eslint-disable react/react-in-jsx-scope */
+import React from 'react';
 import { CircularProgress, Grid } from '@mui/material';
 
 export function Loading() {

@@ -1,21 +1,82 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+
+// falta agregar el navigation cuando esten bien los datos
+import React, { useContext, useState } from 'react';
+// import { useNavigate } from 'react-router-dom';
 import {
-  Button,
-  Card, CardContent, Grid, InputAdornment, InputLabel, TextField,
-  Typography,
+  Button, Card, CardContent, FormControlLabel, FormLabel, Grid,
+  InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography,
 } from '@mui/material';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
+import { Box } from '@mui/system';
+import dayjs from 'dayjs';
+import Swal from 'sweetalert2';
+
+import { context } from '../../context/authContext';
 import UserMenu from '../Utilities/Menu/UserMenu';
-import reminderImg from '../../img/glass.jpeg';
+import { useForm } from '../../hooks/useForm';
+
+const images = [
+  { id: 1, title: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
+  { id: 2, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
+  { id: 3, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
+];
+const minutes1 = [
+  { id: 5, label: '5 minutes' },
+];
+const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
 
 export function ConfigureReminder() {
-  const navigate = useNavigate();
-  const [startHour, setStartHour] = React.useState(null);
-  const [endHour, setEndHour] = React.useState(null);
+  // const navigate = useNavigate();
+  const [startHour, setStartHour] = React.useState(dayjs('2022-11-22'));
+  const [endHour, setEndHour] = React.useState(dayjs('2022-11-22'));
+  const [minutesLapse, setMinutesLapse] = React.useState('5');
+  const [image, setImage] = useState('');
+  const authContext = useContext(context);
+  // const imagesA = useFetchGet('http://localhost:8080/api/images');
+  const initialForm = {
+    name: '',
+  };
+  const [formValues, handleInputChange] = useForm(initialForm);
+  const {
+    name,
+  } = formValues;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const hourBegin = startHour.format('HH:mm');
+    const hourEnd = endHour.format('HH:mm');
+
+    const res = await fetch('http://localhost:8080/api/reminder', {
+      method: 'POST',
+      body: JSON.stringify({
+        name,
+        hourBegin,
+        hourEnd,
+        minutesLapse,
+        image,
+      }),
+      headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+    });
+    const resJSON = await res.json();
+    const isRegistered = resJSON.msg;
+    console.log(isRegistered);
+    if (isRegistered) {
+      Swal.fire({
+        title: 'Email Sent',
+        confirmButtonText: 'Okay',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = '/main';
+        }
+      });
+    }
+  };
+
   return (
     <div>
       <UserMenu />
@@ -29,7 +90,7 @@ export function ConfigureReminder() {
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="title">Title*</InputLabel>
-                  <TextField fullWidth id="title" type="text" placeholder="Enter the title" variant="outlined" name="title" size="small" required />
+                  <TextField fullWidth id="title" type="text" placeholder="Enter the title" variant="outlined" name="name" onChange={handleInputChange} size="small" required />
                 </Grid>
                 <Grid item xs={12} md={6}>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -40,7 +101,7 @@ export function ConfigureReminder() {
                       onChange={(newValue) => {
                         setStartHour(newValue);
                       }}
-                      // renderInput={(params) => <TextField size="small" {...params} />}
+                      renderInput={(params) => <TextField fullWidth size="small" {...params} />}
                     />
                   </LocalizationProvider>
                 </Grid>
@@ -53,44 +114,36 @@ export function ConfigureReminder() {
                       onChange={(newValue) => {
                         setEndHour(newValue);
                       }}
-                      // renderInput={(params) => <TextField size="small" {...params} />}
+                      renderInput={(params) => <TextField fullWidth size="small" {...params} />}
                     />
                   </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <InputLabel htmlFor="configure-reminder-image">Select an image*</InputLabel>
-                    <TextField
-                      fullWidth
-                      id="configure-reminder-image"
-                      helperText="Please select the loop time"
-                      type="number"
-                      size="small"
-                      InputProps={{
-                        inputProps: { max: 60, min: 1 },
-                        startAdornment: <InputAdornment position="start">minutes</InputAdornment>,
-                      }}
-                    />
-                  </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12}>
-                  <InputLabel htmlFor="loop-time">Start hour*</InputLabel>
+                  <FormLabel id="demo-radio-buttons-group-label">Select an image</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="demo-radio-buttons-group-label"
+                    name="radio-buttons-group"
+                    value={image}
+                    onChange={(e) => setImage(e.target.value)}
+                  >
+                    {images.map((imageArray) => (
+                      <FormControlLabel
+                        value={imageArray.id}
+                        key={imageArray.id}
+                        control={<Radio icon={<img src={imageArray.ref} width="120" />} checkedIcon={<Box component="img" width="120px" backgroundColor="rgba(207, 204, 206, 0.3)" src={imageArray.ref} />} />}
+                      />
+                    ))}
+                  </RadioGroup>
                 </Grid>
                 <Grid item xs={12} mt={2}>
-                  <Button fullWidth type="submit" onClick={() => navigate('/main')}>Continue</Button>
+                  <Button fullWidth type="submit" onClick={handleSubmit}>Continue</Button>
                 </Grid>
               </Grid>
             </form>
           </CardContent>
         </Card>
       </Grid>
-      <div className="configure-reminder-center">
-        <div className="configure-reminder-image-box">
-          <label htmlFor="configure-reminder-image">Configure image</label>
-          <img src={reminderImg} alt="Graphic representation for the reminder" id="configure-reminder-image" className="configure-reminder-image" />
-        </div>
-        <button className="configure-reminder-btn" type="button">Reset Password</button>
-      </div>
     </div>
   );
 }

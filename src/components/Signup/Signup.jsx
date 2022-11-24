@@ -1,6 +1,5 @@
-/* eslint-disable consistent-return */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable no-unused-vars */
+/* eslint-disable consistent-return */
 import React, { useContext, useState } from 'react';
 import Swal from 'sweetalert2';
 import PasswordChecklist from 'react-password-checklist';
@@ -12,11 +11,8 @@ import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 import { useForm } from '../../hooks/useForm';
 import { context } from '../../context/authContext';
 
-// eslint-disable-next-line import/prefer-default-export
 export function Signup() {
   const navigate = useNavigate();
-  // const [password, setPassword] = useState('');
-  // const [passwordAgain, setPasswordAgain] = useState('');
   const [disableBtn, setDisableBtn] = useState(true);
   const authContext = useContext(context);
 
@@ -26,12 +22,15 @@ export function Signup() {
     password: '',
     confPassword: '',
   };
-  const [formValues, handleInputChange, reset] = useForm(initialForm);
+
+  const [formValues, handleInputChange] = useForm(initialForm);
   const {
     username, email, password, confPassword,
   } = formValues;
+
   const handleRegister = async (e) => {
     e.preventDefault();
+
     const res = await fetch('http://localhost:8080/api/auth/register', {
       method: 'POST',
       body: JSON.stringify({
@@ -41,6 +40,7 @@ export function Signup() {
       }),
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });
+
     const resJSON = await res.json();
     // console.log(resJSON);
     const isRegistered = resJSON.data.registered;
@@ -51,15 +51,24 @@ export function Signup() {
         icon: 'error',
       });
     }
+
     if (isRegistered) {
       authContext.setLogged(true);
       authContext.setToken(resJSON.data.token);
     } else {
-      // eslint-disable-next-line no-alert
       Swal.fire({
-        title: 'Error',
-        text: 'Email already registered',
-        icon: 'error',
+        title: 'Do you want to save the changes?',
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: 'Save',
+        denyButtonText: 'Don\'t save',
+      }).then((result) => {
+        /* Read more about isConfirmed, isDenied below */
+        if (result.isConfirmed) {
+          Swal.fire('Saved!', '', 'success');
+        } else if (result.isDenied) {
+          Swal.fire('Changes are not saved', '', 'info');
+        }
       });
     }
   };
