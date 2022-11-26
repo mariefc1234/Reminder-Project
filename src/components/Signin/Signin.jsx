@@ -3,18 +3,23 @@ import React, { useContext, useState } from 'react';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import {
-  Button, Card, CardContent, Grid, InputLabel, Link, TextField, Typography,
+  Alert,
+  Button, Card, CardContent, Grid, IconButton, InputLabel, Link, Snackbar, TextField, Typography,
  } from '@mui/material';
+ import CloseIcon from '@mui/icons-material/Close';
 import { context } from '../../context/authContext';
 import { useForm } from '../../hooks/useForm';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 import Popup from '../Utilities/Popup';
-import { ForgotPasswordForm } from './ForgotPasswordForm';
+import { ForgotPassword } from '../ForgotPassword/ForgotPassword';
 
 export function Signin() {
   const navigate = useNavigate();
   const authContext = useContext(context);
   const [openPopup, setOpenPopup] = useState(false);
+  const [openAlert, setOpenAlert] = useState(false);
+  // const [isEmailSent, setIsEmailSent] = useState(false);
+
   const initialForm = {
       email: '',
       password: '',
@@ -48,6 +53,20 @@ export function Signin() {
       });
     }
   };
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
+  const isEmailSent = (emailSent) => {
+    if (emailSent) {
+      setOpenAlert(true);
+    }
+  };
+
   return (
     <div>
       <GeneralMenu />
@@ -57,7 +76,7 @@ export function Signin() {
             <Typography gutterBottom variant="h5" align="center" sx={{ fontWeight: '500' }}>
               Welcome!
             </Typography>
-            <form>
+            <form onSubmit={handleLogin}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="email">Email address*</InputLabel>
@@ -66,18 +85,18 @@ export function Signin() {
                 <Grid item xs={12}>
                   <InputLabel htmlFor="password">Password*</InputLabel>
                   <TextField fullWidth id="password" type="password" placeholder="Enter your password" variant="outlined" name="password" onChange={handleInputChange} required />
-                  <Link component="button" underline="hover" variant="body2" onClick={() => navigate('/signup')} sx={{ color: 'text.secondary' }}>
+                  <Link underline="hover" variant="body2" onClick={() => setOpenPopup(true)} sx={{ color: 'text.secondary' }}>
                     Forgot Password?
                   </Link>
                 </Grid>
                 <Grid item xs={12} mt={2} mb={1}>
-                  <Button fullWidth type="submit" onClick={handleLogin}>Sign In</Button>
+                  <Button fullWidth type="submit">Sign In</Button>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
                   <Typography variant="body1" gutterBottom>
                     Not a member?
                     {' '}
-                    <Link component="button" underline="hover" variant="body1" onClick={() => navigate('/signup')}> Sign up now </Link>
+                    <Link underline="hover" variant="body1" onClick={() => navigate('/signup')}> Sign up now </Link>
                   </Typography>
                 </Grid>
               </Grid>
@@ -90,8 +109,27 @@ export function Signin() {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        <ForgotPasswordForm />
+        <ForgotPassword isEmailSent={isEmailSent} />
       </Popup>
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert
+          action={(
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpenAlert(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          )}
+          sx={{ mb: 2 }}
+        >
+          Email Sent
+        </Alert>
+      </Snackbar>
     </div>
   );
 }

@@ -42,7 +42,7 @@ export function Signup() {
     });
 
     const resJSON = await res.json();
-    // console.log(resJSON);
+    console.log(resJSON);
     const isRegistered = resJSON.data.registered;
     if (!resJSON.ok) {
       return Swal.fire({
@@ -56,19 +56,10 @@ export function Signup() {
       authContext.setLogged(true);
       authContext.setToken(resJSON.data.token);
     } else {
-      Swal.fire({
-        title: 'Do you want to save the changes?',
-        showDenyButton: true,
-        showCancelButton: true,
-        confirmButtonText: 'Save',
-        denyButtonText: 'Don\'t save',
-      }).then((result) => {
-        /* Read more about isConfirmed, isDenied below */
-        if (result.isConfirmed) {
-          Swal.fire('Saved!', '', 'success');
-        } else if (result.isDenied) {
-          Swal.fire('Changes are not saved', '', 'info');
-        }
+      return Swal.fire({
+        title: 'Error',
+        text: 'Email already registered',
+        icon: 'error',
       });
     }
   };
@@ -82,7 +73,7 @@ export function Signup() {
             <Typography gutterBottom variant="h5" align="center" sx={{ fontWeight: '500' }}>
               Create Account
             </Typography>
-            <form>
+            <form onSubmit={handleRegister}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="username">Username*</InputLabel>
@@ -131,7 +122,7 @@ export function Signup() {
                   />
                 </Grid>
                 <Grid item xs={12} mt={2} mb={1}>
-                  <Button type="submit" color="primary" disabled={disableBtn} onClick={handleRegister} fullWidth>Sign Up</Button>
+                  <Button type="submit" color="primary" disabled={disableBtn} fullWidth>Sign Up</Button>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
                   <Typography variant="body1" gutterBottom>

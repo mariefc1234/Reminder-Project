@@ -1,14 +1,12 @@
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react/prop-types */
 import {
-  Button, Card, CardContent, Grid, InputLabel, TextField, Typography,
+  Button, Grid, InputLabel, TextField,
 } from '@mui/material';
-import Swal from 'sweetalert2';
-import React, { useContext, useState } from 'react';
-import { context } from '../../context/authContext';
+import { React, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
-import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 
-export function ForgotPassword() {
-  const authContext = useContext(context);
+export function ForgotPassword(props) {
   const [emailError, setEmailError] = useState(false);
   const initialForm = {
     email: '',
@@ -32,47 +30,28 @@ export function ForgotPassword() {
     });
 
     const resJSON = await res.json();
-    const isLogged = resJSON.data.logged;
+    console.log(resJSON);
+    const isSent = resJSON.ok;
 
-    if (isLogged) {
-      await authContext.setLogged(true);
-      await authContext.setToken(resJSON.data.token);
+    if (isSent) {
+      props.isEmailSent(true);
     } else {
-      Swal.fire({
-        title: 'Email Sent',
-        confirmButtonText: 'Okay',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = '/signin';
-        }
-      });
+      props.isEmailSent(false);
     }
     }
   };
 
   return (
-    <div>
-      <GeneralMenu />
-      <Grid>
-        <Card style={{ maxWidth: 650, padding: '20px 5px', margin: '0 auto' }}>
-          <CardContent>
-            <Typography gutterBottom variant="h5" align="center" sx={{ fontWeight: '500' }}>
-              Forgot your password?
-            </Typography>
-            <form>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>
-                  <InputLabel htmlFor="email">Email address*</InputLabel>
-                  <TextField fullWidth id="email" type="email" placeholder="Enter your email" variant="outlined" name="email" onChange={handleInputChange} error={emailError} required />
-                </Grid>
-                <Grid item xs={12} mt={2}>
-                  <Button fullWidth type="submit" onClick={handleClick}>Reset password</Button>
-                </Grid>
-              </Grid>
-            </form>
-          </CardContent>
-        </Card>
+    <form>
+      <Grid container spacing={1}>
+        <Grid item xs={12}>
+          <InputLabel htmlFor="email">Email address*</InputLabel>
+          <TextField fullWidth id="email" type="email" placeholder="Enter your email" variant="outlined" name="email" onChange={handleInputChange} error={emailError} required />
+        </Grid>
+        <Grid item xs={12} mt={2}>
+          <Button fullWidth type="submit" onClick={handleClick}>Reset password</Button>
+        </Grid>
       </Grid>
-    </div>
+    </form>
   );
 }
