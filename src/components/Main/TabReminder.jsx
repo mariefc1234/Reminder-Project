@@ -3,7 +3,7 @@
 import {
  Box, Button, Grid, IconButton, Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoopIcon from '@mui/icons-material/Loop';
@@ -12,27 +12,19 @@ import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2';
 import { ConfigureReminderForm } from '../ConfigureReminder/ConfigureReminderForm';
 import Popup from '../Utilities/Popup';
-
-const reminders = [
-  {
-    id: 1, name: 'Reminder 1', hourBegin: '10:20', hourEnd: '12:50', minutesLapse: 4, url: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png',
-  },
-  {
-    id: 2, name: 'reminder 2', hourBegin: '08:50', hourEnd: '09:50', minutesLapse: 4, url: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png',
-  },
-  {
-    id: 3, name: 'reminder 3', hourBegin: '05:40', hourEnd: '06:20', minutesLapse: 4, url: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png',
-  },
-  {
-    id: 4, name: 'reminder 4', hourBegin: '07:30', hourEnd: '10:20', minutesLapse: 4, url: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png',
-  },
-];
+import { context } from '../../context/authContext';
+import { useFetchGet } from '../../hooks/useFetchGet';
+import { Loading } from '../Utilities/Loading/Loading';
 
 export default function TabReminder(props) {
+  const authContext = useContext(context);
   const { value, index } = props;
   const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
   const [reminderParam, setReminderParam] = useState(null);
+
+  const urlReminder = 'http://localhost:8080/api/reminder';
+  const { data, loading } = useFetchGet(urlReminder, authContext.token);
 
   const openInPopup = (item) => {
       setReminderParam(item);
@@ -64,7 +56,10 @@ export default function TabReminder(props) {
       value === index && (
         <Box style={{ maxWidth: 650, padding: '20px 5px', margin: '0 auto' }}>
           <Button sx={{ mb: 3 }} onClick={() => navigate('/configurereminder')}>Create Reminder</Button>
-            {reminders.map((reminder) => (
+          {
+            (loading)
+            ? <Loading />
+            : data.data.reminders.map((reminder) => (
               <Grid container spacing={2} key={reminder.id} sx={{ mb: 3 }}>
                 <Grid item>
                   <Box>
@@ -97,7 +92,8 @@ export default function TabReminder(props) {
                   </Grid>
                 </Grid>
               </Grid>
-            ))}
+            ))
+          }
         </Box>
       )
     }
