@@ -20,11 +20,12 @@ import Swal from 'sweetalert2';
 import { context } from '../../context/authContext';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import { useForm } from '../../hooks/useForm';
+import { forceLogout } from '../../helpers/unauthorized';
 
 const images = [
-  { id: 1, title: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
-  { id: 2, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
-  { id: 3, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
+  { id: 1, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
+  { id: 2, title: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
+  { id: 3, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
 ];
 
 const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
@@ -36,7 +37,6 @@ export function ConfigureReminder() {
   const [minutesLapse, setMinutesLapse] = React.useState('0');
   const [image, setImage] = useState('');
   const authContext = useContext(context);
-  // const imagesA = useFetchGet('http://localhost:8080/api/images');
   const initialForm = {
     name: '',
   };
@@ -61,7 +61,7 @@ export function ConfigureReminder() {
       headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
     });
     const resJSON = await res.json();
-    const isRegistered = resJSON.msg;
+    const isRegistered = resJSON.ok;
     if (isRegistered) {
       Swal.fire({
         title: 'Reminder Created',
@@ -71,6 +71,14 @@ export function ConfigureReminder() {
           window.location.href = '/main';
         }
       });
+    } else {
+      Swal.fire({
+        title: 'Session expired',
+        confirmButtonText: 'Okay',
+      });
+      localStorage.clear();
+      authContext.setToken(false);
+      authContext.setLogged(false);
     }
   };
 

@@ -5,9 +5,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-// falta agregar el navigate cuando esten bien los datos
 import React, { useContext, useEffect, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import {
   Button, FormControlLabel, FormLabel, Grid,
   InputLabel, MenuItem, Radio, RadioGroup, Select, TextField,
@@ -17,20 +15,20 @@ import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { Box } from '@mui/system';
 import dayjs from 'dayjs';
 import { context } from '../../context/authContext';
-import { useFetchGet } from '../../hooks/useFetchGet';
 import { useForm } from '../../hooks/useForm';
 
 const images = [
-  { id: 1, title: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
-  { id: 2, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
-  { id: 3, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
+  { id: 1, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
+  { id: 2, title: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
+  { id: 3, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
 ];
 
 const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
 
 export function EditReminder(reminder1) {
-  // const navigate = useNavigate();
-  const { reminder } = reminder1;
+  const {
+    reminder, reminders, setReminders, isReminderEdited,
+  } = reminder1;
   const authContext = useContext(context);
   const [startHour, setStartHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourBegin}`));
   const [endHour, setEndHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourEnd}`));
@@ -48,7 +46,33 @@ export function EditReminder(reminder1) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(title, startHour, endHour, minutesLapse, image);
+    const hourBegin = startHour.format('HH:mm');
+    const hourEnd = endHour.format('HH:mm');
+    const res = await fetch(`http://localhost:8080/api/reminder/${reminder.id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+        name: title,
+        hourBegin,
+        hourEnd,
+        minutesLapse,
+        image,
+      }),
+      headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+    });
+    const resJSON = await res.json();
+    const isEdited = resJSON.msg;
+    if (isEdited) {
+      setReminders(reminders.map((rem) => ((rem.id === reminder.id) ? {
+        ...rem,
+        name: title,
+        hourBegin,
+        hourEnd,
+        minutesLapse,
+        image,
+        url: images[image - 1].ref,
+      } : rem)));
+      isReminderEdited(true);
+    }
   };
 
   return (

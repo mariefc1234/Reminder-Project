@@ -5,8 +5,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   Alert,
   Button, Card, CardContent, Grid, IconButton, InputLabel, Link, Snackbar, TextField, Typography,
- } from '@mui/material';
- import CloseIcon from '@mui/icons-material/Close';
+} from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 import { context } from '../../context/authContext';
 import { useForm } from '../../hooks/useForm';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';

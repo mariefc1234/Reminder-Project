@@ -1,14 +1,16 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
- Box, Button, Grid, IconButton, Paper, Typography,
+  Alert,
+ Box, Button, Grid, IconButton, Paper, Snackbar, Typography,
 } from '@mui/material';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoopIcon from '@mui/icons-material/Loop';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import CloseIcon from '@mui/icons-material/Close';
 import Swal from 'sweetalert2';
 import { EditReminder } from '../ConfigureReminder/EditReminder';
 import Popup from '../Utilities/Popup';
@@ -22,18 +24,39 @@ export default function TabReminder(props) {
   const { value, index } = props;
   const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
-  const [reminderParam, setReminderParam] = useState(null);
+  const [openAlert, setOpenAlert] = useState(false);
   const [reminderObject, setReminderObject] = useState(null);
+  const [reminders, setReminders] = useState([]);
 
   const urlReminder = 'http://localhost:8080/api/reminder';
   const { data, loading } = useFetchGet(urlReminder, authContext.token);
 
   const openInPopup = (item, rem) => {
-      setReminderParam(item);
       setReminderObject(rem);
       setOpenPopup(true);
   };
-  const deleteItem = (item) => {
+
+  const isReminderEdited = (isEdited) => {
+    if (isEdited) {
+      setOpenPopup(false);
+      setOpenAlert(true);
+    }
+  };
+
+  const handleCloseAlert = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenAlert(false);
+  };
+
+  useEffect(() => {
+    if (!loading) {
+      setReminders(data.data.reminders);
+    }
+  }, [loading]);
+
+  const deleteItem = async (item) => {
     // DELETE http://localhost:8080/api/reminder/item
     Swal.fire({
       title: `Are you sure?${item}`,
@@ -43,13 +66,22 @@ export default function TabReminder(props) {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        Swal.fire(
-          'Deleted!',
-          'Your file has been deleted.',
-          'success',
-        );
+        const res = await fetch(`http://localhost:8080/api/reminder/${item}`, {
+        method: 'DELETE',
+        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+        });
+        const resJSON = await res.json();
+        const isDeleted = resJSON.ok;
+        if (isDeleted) {
+          setReminders(reminders.filter((reminder) => reminder.id !== item));
+          Swal.fire(
+            'Deleted!',
+            'Your reminder has been deleted.',
+            'success',
+          );
+        }
       }
     });
   };
@@ -65,7 +97,7 @@ export default function TabReminder(props) {
           {
             (loading)
             ? <Loading />
-            : data.data.reminders.map((reminder) => (
+            : reminders.map((reminder) => (
 
               <Grid item xs={12} sm={12} md={4} key={reminder.id}>
                 <Paper style={{ padding: '20px' }}>
@@ -77,7 +109,13 @@ export default function TabReminder(props) {
                       <IconButton onClick={() => { openInPopup(reminder.id, reminder); }} aria-label="edit">
                         <EditIcon />
                       </IconButton>
-                      <IconButton onClick={() => { deleteItem(reminder.id); }} aria-label="delete">
+                      <IconButton
+                        onClick={(e) => {
+                          e.preventDefault();
+                          deleteItem(reminder.id);
+                        }}
+                        aria-label="delete"
+                      >
                         <DeleteIcon />
                       </IconButton>
                     </Grid>
@@ -108,10 +146,31 @@ export default function TabReminder(props) {
         setOpenPopup={setOpenPopup}
       >
         <EditReminder
-          id={reminderParam}
           reminder={reminderObject}
+          reminders={reminders}
+          setReminders={setReminders}
+          isReminderEdited={isReminderEdited}
         />
       </Popup>
+      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
+        <Alert
+          action={(
+            <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpenAlert(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          )}
+          sx={{ mb: 2 }}
+        >
+          Reminder Edited
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
