@@ -26,16 +26,14 @@ const images = [
   { id: 2, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
   { id: 3, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
 ];
-const minutes1 = [
-  { id: 5, label: '5 minutes' },
-];
+
 const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
 
 export function ConfigureReminder() {
   // const navigate = useNavigate();
   const [startHour, setStartHour] = React.useState(dayjs('2022-11-22'));
   const [endHour, setEndHour] = React.useState(dayjs('2022-11-22'));
-  const [minutesLapse, setMinutesLapse] = React.useState('5');
+  const [minutesLapse, setMinutesLapse] = React.useState('0');
   const [image, setImage] = useState('');
   const authContext = useContext(context);
   // const imagesA = useFetchGet('http://localhost:8080/api/images');
@@ -64,10 +62,9 @@ export function ConfigureReminder() {
     });
     const resJSON = await res.json();
     const isRegistered = resJSON.msg;
-    console.log(isRegistered);
     if (isRegistered) {
       Swal.fire({
-        title: 'Email Sent',
+        title: 'Reminder Created',
         confirmButtonText: 'Okay',
       }).then((result) => {
         if (result.isConfirmed) {
@@ -86,7 +83,7 @@ export function ConfigureReminder() {
             <Typography gutterBottom variant="h5" align="center" sx={{ fontWeight: '500' }}>
               Configure Reminder
             </Typography>
-            <form>
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="title">Title*</InputLabel>
@@ -119,6 +116,18 @@ export function ConfigureReminder() {
                   </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
+                  <InputLabel htmlFor="minutes-lapse-label">Minutes Lapse*</InputLabel>
+                  <Select
+                    labelId="minutes-lapse-label"
+                    id="demo-simple-select"
+                    value={minutesLapse}
+                    label="Loop minutes"
+                    onChange={(e) => setMinutesLapse(e.target.value)}
+                  >
+                    {minutes.map((minute) => <MenuItem key={minute} value={minute}>{minute}</MenuItem>)}
+                  </Select>
+                </Grid>
+                <Grid item xs={12}>
                   <FormLabel id="demo-radio-buttons-group-label">Select an image</FormLabel>
                   <RadioGroup
                     row
@@ -137,7 +146,7 @@ export function ConfigureReminder() {
                   </RadioGroup>
                 </Grid>
                 <Grid item xs={12} mt={2}>
-                  <Button fullWidth type="submit" onClick={handleSubmit}>Continue</Button>
+                  <Button fullWidth type="submit" variant="defaultButton">Continue</Button>
                 </Grid>
               </Grid>
             </form>

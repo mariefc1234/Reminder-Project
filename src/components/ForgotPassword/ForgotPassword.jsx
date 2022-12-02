@@ -49,7 +49,7 @@ export function ForgotPassword(props) {
           <TextField fullWidth id="email" type="email" placeholder="Enter your email" variant="outlined" name="email" onChange={handleInputChange} error={emailError} required />
         </Grid>
         <Grid item xs={12} mt={2}>
-          <Button fullWidth type="submit" onClick={handleClick}>Reset password</Button>
+          <Button fullWidth type="submit" variant="defaultButton" onClick={handleClick}>Reset password</Button>
         </Grid>
       </Grid>
     </form>

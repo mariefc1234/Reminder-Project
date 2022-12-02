@@ -73,7 +73,7 @@ export function ContactUs() {
                   <TextField label="Message" multiline rows={4} placeholder="Type your message here" name="message" onChange={handleInputChange} error={messageError} fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" onClick={handleSubmit} fullWidth>Submit</Button>
+                  <Button type="submit" onClick={handleSubmit} variant="defaultButton" fullWidth>Submit</Button>
                 </Grid>
               </Grid>
             </form>

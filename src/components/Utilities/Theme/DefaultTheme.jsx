@@ -17,6 +17,20 @@ export const DefaultTheme = createTheme({
       styleOverrides: {
         root: {
           fontSize: '1rem',
+          padding: '0.5rem 1.5rem',
+          borderRadius: '16px',
+          transition: '0.3s',
+          textTransform: 'none',
+          '&:hover': {
+            backgroundColor: '#ee8352',
+          },
+        },
+      },
+      variants: [
+        {
+          props: { variant: 'defaultButton' },
+          style: {
+            fontSize: '1rem',
             padding: '0.5rem 1.5rem',
             color: '#fff',
             borderRadius: '16px',
@@ -26,9 +40,8 @@ export const DefaultTheme = createTheme({
             '&:hover': {
               backgroundColor: '#ee8352',
               },
+          },
         },
-      },
-      variants: [
         {
           props: { variant: 'menuButton' },
           style: {

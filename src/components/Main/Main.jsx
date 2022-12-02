@@ -10,6 +10,8 @@ import { Loading } from '../Utilities/Loading/Loading';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import TabReminder from './TabReminder';
 import TabStats from './TabStats';
+import TabToDo from './TabToDo';
+import CarouselSlide from './CarouselSlide';
 
 export function Main() {
     const authContext = useContext(context);
@@ -27,7 +29,6 @@ export function Main() {
 
     const [tabValue, setTabValue] = useState(0);
     const handleTabs = (e, val) => {
-      console.warn(val);
       setTabValue(val);
     };
     return (
@@ -36,9 +37,11 @@ export function Main() {
         <Tabs value={tabValue} onChange={handleTabs} centered>
           <Tab label="Reminder" />
           <Tab label="Stats" />
+          <Tab label="To Do" />
         </Tabs>
         <TabReminder value={tabValue} index={0}>Item detail 1</TabReminder>
         <TabStats value={tabValue} index={1}>Item detail 2 </TabStats>
+        <TabToDo value={tabValue} index={2}>tab To dos </TabToDo>
       </div>
     );
 }

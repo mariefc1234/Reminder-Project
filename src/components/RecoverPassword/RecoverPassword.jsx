@@ -61,7 +61,7 @@ export function RecoverPassword() {
                   />
                 </Grid>
                 <Grid item xs={12} mt={2} mb={1}>
-                  <Button type="submit" color="primary" disabled={disableBtn} fullWidth>Sign Up</Button>
+                  <Button type="submit" color="primary" variant="defaultButton" disabled={disableBtn} fullWidth>Sign Up</Button>
                 </Grid>
               </Grid>
             </form>

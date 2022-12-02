@@ -99,7 +99,7 @@ function GeneralMenu() {
             </Menu>
           </Box>
           <Box sx={{ flexGrow: 0, display: { xs: 'none', md: 'flex' } }}>
-            <Button onClick={() => navigate('/signin')}>Sign In</Button>
+            <Button onClick={() => navigate('/signin')} variant="defaultButton">Sign In</Button>
           </Box>
         </Toolbar>
       </Container>

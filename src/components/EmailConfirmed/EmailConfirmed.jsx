@@ -18,7 +18,7 @@ export function EmailConfirmed() {
       >
         <img src={emailConfirmedImg} alt="Yellow and funny face" style={{ height: '40vh', width: '40vh' }} />
         <Typography variant="h4" style={{ fontSize: '2rem' }}>Email Confirmed</Typography>
-        <Button type="submit" onClick={() => navigate('/main')}>Continue</Button>
+        <Button type="submit" onClick={() => navigate('/main')} variant="defaultButton">Continue</Button>
       </Box>
     </div>
   );

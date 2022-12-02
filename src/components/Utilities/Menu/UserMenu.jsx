@@ -1,19 +1,15 @@
 import * as React from 'react';
+import { useContext } from 'react';
 import {
   AppBar, Box, Toolbar, IconButton, Typography, Menu, Container, MenuItem, Tooltip,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import iconImg from '../../../img/logo.png';
-
-const settings = [
-  { id: 1, title: 'Profile', ref: '/healthytips' },
-  { id: 2, title: 'Account', ref: '/aboutus' },
-  { id: 3, title: 'Dashboard', ref: '/contactus' },
-  { id: 4, title: 'Logout', ref: '/signin' },
-];
+import { context } from '../../../context/authContext';
 
 function UserMenu() {
+  const authContext = useContext(context);
   const navigate = useNavigate();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -23,6 +19,13 @@ function UserMenu() {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleLogout = (event) => {
+    event.preventDefault();
+    localStorage.clear();
+    authContext.setToken(false);
+    authContext.setLogged(false);
   };
 
   return (
@@ -85,11 +88,18 @@ function UserMenu() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting.id} onClick={() => navigate(setting.ref)}>
-                  <Typography textAlign="center">{setting.title}</Typography>
-                </MenuItem>
-              ))}
+              <MenuItem onClick={() => navigate('/main')}>
+                <Typography textAlign="center">Profile</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/main')}>
+                <Typography textAlign="center">Account</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => navigate('/main')}>
+                <Typography textAlign="center">Dashboard</Typography>
+              </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                <Typography textAlign="center">Logout</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

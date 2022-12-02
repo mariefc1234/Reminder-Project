@@ -122,7 +122,7 @@ export function Signup() {
                   />
                 </Grid>
                 <Grid item xs={12} mt={2} mb={1}>
-                  <Button type="submit" color="primary" disabled={disableBtn} fullWidth>Sign Up</Button>
+                  <Button type="submit" color="primary" variant="defaultButton" disabled={disableBtn} fullWidth>Sign Up</Button>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
                   <Typography variant="body1" gutterBottom>

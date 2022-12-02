@@ -18,7 +18,6 @@ export function Signin() {
   const authContext = useContext(context);
   const [openPopup, setOpenPopup] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
-  // const [isEmailSent, setIsEmailSent] = useState(false);
 
   const initialForm = {
       email: '',
@@ -43,8 +42,8 @@ export function Signin() {
     const isLogged = resJSON.data.logged;
 
     if (isLogged) {
-      await authContext.setLogged(true);
       await authContext.setToken(resJSON.data.token);
+      await authContext.setLogged(true);
     } else {
       Swal.fire({
         title: 'Error',
@@ -90,7 +89,7 @@ export function Signin() {
                   </Link>
                 </Grid>
                 <Grid item xs={12} mt={2} mb={1}>
-                  <Button fullWidth type="submit">Sign In</Button>
+                  <Button fullWidth type="submit" variant="defaultButton">Sign In</Button>
                 </Grid>
                 <Grid item xs={12} display="flex" justifyContent="center" alignItems="center">
                   <Typography variant="body1" gutterBottom>

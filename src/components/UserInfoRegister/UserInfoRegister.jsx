@@ -132,7 +132,7 @@ export function UserInfoRegister() {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} mt={2}>
-                  <Button fullWidth type="submit" onClick={handleSubmit}>Continue</Button>
+                  <Button fullWidth type="submit" variant="defaultButton" onClick={handleSubmit}>Continue</Button>
                 </Grid>
               </Grid>
             </form>
