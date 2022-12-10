@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
-  Alert, Box, Button, Grid, IconButton, Paper, Snackbar, Typography,
+  Box, Button, Grid, IconButton, Paper, Typography,
 } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -9,20 +9,21 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoopIcon from '@mui/icons-material/Loop';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import CloseIcon from '@mui/icons-material/Close';
-import Swal from 'sweetalert2';
-import { EditReminder } from '../ConfigureReminder/EditReminder';
-import Popup from '../Utilities/Popup';
+import { EditReminder } from './EditReminder';
+import Popup from '../Utilities/Dialogs/Popup';
 import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import { Loading } from '../Utilities/Loading/Loading';
+import CustomAlert from '../Utilities/Dialogs/CustomAlert';
+import ConfirmDialog from '../Utilities/Dialogs/ConfirmDialog';
 
 export default function TabReminder(props) {
   const authContext = useContext(context);
   const { value, index } = props;
   const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
+  const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'warning' });
+  const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
   const [reminderObject, setReminderObject] = useState(null);
   const [reminders, setReminders] = useState([]);
 
@@ -34,18 +35,15 @@ export default function TabReminder(props) {
       setOpenPopup(true);
   };
 
-  const isReminderEdited = (isEdited) => {
-    if (isEdited) {
+  const isReminderEdited = (status, text, severity) => {
+    if (status) {
       setOpenPopup(false);
-      setOpenAlert(true);
     }
-  };
-
-  const handleCloseAlert = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlert(false);
+    setAlert({
+      isOpen: true,
+      message: text,
+      severity,
+    });
   };
 
   useEffect(() => {
@@ -55,32 +53,25 @@ export default function TabReminder(props) {
   }, [loading]);
 
   const deleteItem = async (item) => {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert this!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, delete it!',
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        const res = await fetch(`http://localhost:8080/api/reminder/${item}`, {
-        method: 'DELETE',
-        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
-        });
-        const resJSON = await res.json();
-        const isDeleted = resJSON.ok;
-        if (isDeleted) {
-          setReminders(reminders.filter((reminder) => reminder.id !== item));
-          Swal.fire(
-            'Deleted!',
-            'Your reminder has been deleted.',
-            'success',
-          );
-        }
-      }
+    setConfirmDialog({
+      ...confirmDialog,
+      isOpen: false,
     });
+
+    const res = await fetch(`http://localhost:8080/api/reminder/${item}`, {
+    method: 'DELETE',
+    headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+    });
+    const resJSON = await res.json();
+    const isDeleted = resJSON.ok;
+    if (isDeleted) {
+      setReminders(reminders.filter((reminder) => reminder.id !== item));
+      setAlert({
+        isOpen: true,
+        message: 'Reminder deleted successfully',
+        severity: 'success',
+      });
+    }
   };
 
   return (
@@ -89,7 +80,7 @@ export default function TabReminder(props) {
       value === index && (
         <Grid container style={{ maxWidth: '90%', padding: '5px 5px', margin: '0 auto' }} spacing={1}>
           <Grid item xs={12} display="flex" flexDirection="row-reverse">
-            <Button onClick={() => navigate('/configurereminder')} variant="defaultButton">Create Reminder</Button>
+            <Button width="150" onClick={() => navigate('/configurereminder')} variant="defaultButton">Create Reminder</Button>
           </Grid>
           {
             (loading)
@@ -108,7 +99,12 @@ export default function TabReminder(props) {
                       <IconButton
                         onClick={(e) => {
                           e.preventDefault();
-                          deleteItem(reminder.id);
+                          setConfirmDialog({
+                            isOpen: true,
+                            title: 'Are you sure to delete this record?',
+                            subTitle: "You can't undo this operation",
+                            onConfirm: () => { deleteItem(reminder.id); },
+                          });
                         }}
                         aria-label="delete"
                       >
@@ -137,7 +133,7 @@ export default function TabReminder(props) {
       )
     }
       <Popup
-        title="Employee Form"
+        title="Configure reminder"
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
@@ -148,25 +144,8 @@ export default function TabReminder(props) {
           isReminderEdited={isReminderEdited}
         />
       </Popup>
-      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
-        <Alert
-          action={(
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpenAlert(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          )}
-          sx={{ mb: 2 }}
-        >
-          Reminder Edited
-        </Alert>
-      </Snackbar>
+      <CustomAlert alert={alert} setAlert={setAlert} />
+      <ConfirmDialog confirmDialog={confirmDialog} setConfirmDialog={setConfirmDialog} />
     </div>
   );
 }

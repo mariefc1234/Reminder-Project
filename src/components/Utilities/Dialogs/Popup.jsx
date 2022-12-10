@@ -16,6 +16,7 @@ export default function Popup(props) {
           <Typography variant="h6" component="div" style={{ flexGrow: 1 }}>{title}</Typography>
           <Button
             variant="menuButton"
+            aria-label="Close"
             onClick={() => { setOpenPopup(false); }}
           >
             <CloseIcon />

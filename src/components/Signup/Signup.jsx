@@ -1,20 +1,25 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-/* eslint-disable consistent-return */
 import React, { useContext, useState } from 'react';
-import Swal from 'sweetalert2';
 import PasswordChecklist from 'react-password-checklist';
 import {
- Button, Card, CardContent, Grid, TextField, Typography, Link, InputLabel,
+  Button, Card, CardContent, Grid, TextField, Typography, Link,
+  InputLabel, FormControl, OutlinedInput, InputAdornment, IconButton,
 } from '@mui/material';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 import { useForm } from '../../hooks/useForm';
 import { context } from '../../context/authContext';
+import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
 
 export function Signup() {
   const navigate = useNavigate();
   const [disableBtn, setDisableBtn] = useState(true);
   const authContext = useContext(context);
+  const [usernameError, setUsernameError] = useState(false);
+  const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const initialForm = {
     username: '',
@@ -30,38 +35,54 @@ export function Signup() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    const res = await fetch('http://localhost:8080/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify({
-        username,
-        email,
-        password,
-      }),
-      headers: { 'Content-type': 'application/json; charset=UTF-8' },
-    });
-
-    const resJSON = await res.json();
-    console.log(resJSON);
-    const isRegistered = resJSON.data.registered;
-    if (!resJSON.ok) {
-      return Swal.fire({
-        title: 'Error',
-        text: 'Internal server error :c',
-        icon: 'error',
-      });
-    }
-
-    if (isRegistered) {
-      authContext.setLogged(true);
-      authContext.setToken(resJSON.data.token);
+    if (username.indexOf(' ') >= 0) {
+      setUsernameError(true);
     } else {
-      return Swal.fire({
-        title: 'Error',
-        text: 'Email already registered',
-        icon: 'error',
+      const res = await fetch('http://localhost:8080/api/auth/register', {
+        method: 'POST',
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+        }),
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
       });
+
+      const resJSON = await res.json();
+      const isRegistered = resJSON.data.registered;
+      if (!resJSON.ok) {
+        setAnnouncementDialog({
+          isOpen: true,
+          title: 'Internal server error',
+          onConfirm: () => {
+            setAnnouncementDialog({
+            ...announcementDialog,
+                      isOpen: false,
+            });
+          },
+        });
+      }
+
+      if (isRegistered) {
+        authContext.setLogged(true);
+        authContext.setToken(resJSON.data.token);
+      } else {
+        setAnnouncementDialog({
+          isOpen: true,
+          title: 'Email already registered',
+          onConfirm: () => {
+            setAnnouncementDialog({
+            ...announcementDialog,
+                      isOpen: false,
+            });
+          },
+        });
+      }
     }
+  };
+
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
   };
 
   return (
@@ -77,7 +98,7 @@ export function Signup() {
               <Grid container spacing={1}>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="username">Username*</InputLabel>
-                  <TextField fullWidth id="username" type="text" placeholder="Enter your username" variant="outlined" name="username" onChange={handleInputChange} required />
+                  <TextField fullWidth id="username" type="text" placeholder="Enter your username" variant="outlined" name="username" error={usernameError} onChange={handleInputChange} required />
                 </Grid>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="email">Email address*</InputLabel>
@@ -85,11 +106,51 @@ export function Signup() {
                 </Grid>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="password">Password*</InputLabel>
-                  <TextField type="password" fullWidth placeholder="Password" variant="outlined" id="password" name="password" onChange={handleInputChange} required />
+                  <FormControl variant="outlined" fullWidth>
+                    <OutlinedInput
+                      id="password"
+                      type={passwordShown ? 'text' : 'password'}
+                      name="password"
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Enter your password"
+                      endAdornment={(
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={togglePassword}
+                            edge="end"
+                          >
+                            {passwordShown ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                    )}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="confPassword">Confirm Password*</InputLabel>
-                  <TextField type="password" fullWidth placeholder="Confirm Password" variant="outlined" id="confPassword" name="confPassword" onChange={handleInputChange} required />
+                  <FormControl variant="outlined" fullWidth>
+                    <OutlinedInput
+                      id="confPassword"
+                      type={passwordShown ? 'text' : 'password'}
+                      name="confPassword"
+                      onChange={handleInputChange}
+                      required
+                      placeholder="Confirm your password"
+                      endAdornment={(
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={togglePassword}
+                            edge="end"
+                          >
+                            {passwordShown ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                    )}
+                    />
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} md={6} style={{ fontFamily: '"Poppins", sans-serif', fontSize: '14px' }}>
                   <PasswordChecklist
@@ -136,6 +197,10 @@ export function Signup() {
           </CardContent>
         </Card>
       </Grid>
+      <AnnouncementDialog
+        announcementDialog={announcementDialog}
+        setAnnouncementDialog={setAnnouncementDialog}
+      />
     </div>
   );
 }

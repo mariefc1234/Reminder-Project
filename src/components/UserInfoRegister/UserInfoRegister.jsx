@@ -6,13 +6,13 @@ import {
 import UserMenu from '../Utilities/Menu/UserMenu';
 import { useForm } from '../../hooks/useForm';
 import { context } from '../../context/authContext';
+import CustomAlert from '../Utilities/Dialogs/CustomAlert';
 
 export function UserInfoRegister() {
   const authContext = useContext(context);
   const [genre, setGender] = React.useState('');
   const [activity, setActivity] = React.useState('');
-  const [weightError, setWeightError] = useState(false);
-  const [heightError, setHeightError] = useState(false);
+  const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'warning' });
 
   const handleGenderChange = (event) => {
     setGender(event.target.value);
@@ -29,15 +29,46 @@ export function UserInfoRegister() {
   const {
     weight, height,
   } = formValues;
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+
+  const validateForm = () => {
     if (weight === 0) {
-      setWeightError(true);
+      setAlert({
+        isOpen: true,
+        message: 'Invalid weight',
+        severity: 'error',
+      });
+      return false;
     }
     if (height === 0) {
-      setHeightError(true);
+      setAlert({
+        isOpen: true,
+        message: 'Invalid height',
+        severity: 'error',
+      });
+      return false;
     }
-    if (activity && weight && height && activity) {
+    if (genre.valueOf() === '') {
+      setAlert({
+        isOpen: true,
+        message: 'Please select your genre',
+        severity: 'error',
+      });
+      return false;
+    }
+    if (activity.valueOf() === '') {
+      setAlert({
+        isOpen: true,
+        message: 'Please select your type of activity',
+        severity: 'error',
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (validateForm()) {
       const res = await fetch('http://localhost:8080/api/auth/registerdata', {
         method: 'POST',
         body: JSON.stringify({
@@ -76,9 +107,8 @@ export function UserInfoRegister() {
                     helperText="Please select your weight"
                     type="number"
                     onChange={handleInputChange}
-                    error={weightError}
                     InputProps={{
-                      inputProps: { max: 200, min: 1 },
+                      inputProps: { max: 200, min: 25 },
                       startAdornment: <InputAdornment position="start">kg</InputAdornment>,
                     }}
                   />
@@ -92,9 +122,8 @@ export function UserInfoRegister() {
                     helperText="Please select your height"
                     type="number"
                     onChange={handleInputChange}
-                    error={heightError}
                     InputProps={{
-                      inputProps: { max: 200, min: 1 },
+                      inputProps: { max: 200, min: 130 },
                       startAdornment: <InputAdornment position="start">cm</InputAdornment>,
                     }}
                   />
@@ -139,6 +168,7 @@ export function UserInfoRegister() {
           </CardContent>
         </Card>
       </Grid>
+      <CustomAlert alert={alert} setAlert={setAlert} />
     </div>
   );
 }

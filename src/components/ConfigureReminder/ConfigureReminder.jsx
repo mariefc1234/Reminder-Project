@@ -1,9 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import React, { useContext, useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
 import {
   Button, Card, CardContent, FormControlLabel, FormLabel, Grid,
   InputLabel, MenuItem, Radio, RadioGroup, Select, TextField, Typography,
@@ -12,16 +10,17 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { Box } from '@mui/system';
 import dayjs from 'dayjs';
-import Swal from 'sweetalert2';
 
 import { context } from '../../context/authContext';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import { useForm } from '../../hooks/useForm';
+import CustomAlert from '../Utilities/Dialogs/CustomAlert';
+import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
 
 const images = [
-  { id: 1, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
-  { id: 2, title: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
-  { id: 3, title: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
+  { id: 1, altText: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
+  { id: 2, altText: 'Water', ref: 'https://cdn-icons-png.flaticon.com/512/3248/3248369.png' },
+  { id: 3, altText: 'Stretch', ref: 'https://cdn-icons-png.flaticon.com/512/983/983544.png' },
 ];
 
 const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
@@ -30,8 +29,11 @@ export function ConfigureReminder() {
   const [startHour, setStartHour] = React.useState(dayjs('2022-11-22'));
   const [endHour, setEndHour] = React.useState(dayjs('2022-11-22'));
   const [minutesLapse, setMinutesLapse] = React.useState('0');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(0);
   const authContext = useContext(context);
+  const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'warning' });
+  const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
+
   const initialForm = {
     name: '',
   };
@@ -39,41 +41,68 @@ export function ConfigureReminder() {
   const {
     name,
   } = formValues;
+
+  const validateForm = () => {
+    if (endHour.isBefore(startHour) || endHour.isSame(startHour)) {
+      setAlert({
+        isOpen: true,
+        message: 'Invalid hour',
+        severity: 'error',
+      });
+      return false;
+    }
+    if (minutesLapse.valueOf() === '0') {
+      setAlert({
+        isOpen: true,
+        message: 'Invalid minutes',
+        severity: 'error',
+      });
+      return false;
+    }
+    if (image === 0) {
+      setAlert({
+        isOpen: true,
+        message: 'Invalid image',
+        severity: 'error',
+      });
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const hourBegin = startHour.format('HH:mm');
-    const hourEnd = endHour.format('HH:mm');
 
-    const res = await fetch('http://localhost:8080/api/reminder', {
-      method: 'POST',
-      body: JSON.stringify({
-        name,
-        hourBegin,
-        hourEnd,
-        minutesLapse,
-        image,
-      }),
-      headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
-    });
-    const resJSON = await res.json();
-    const isRegistered = resJSON.ok;
-    if (isRegistered) {
-      Swal.fire({
-        title: 'Reminder Created',
-        confirmButtonText: 'Okay',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = '/main';
-        }
+    if (validateForm()) {
+      const res = await fetch('http://localhost:8080/api/reminder', {
+        method: 'POST',
+        body: JSON.stringify({
+          name,
+          hourBegin: startHour.format('HH:mm'),
+          hourEnd: endHour.format('HH:mm'),
+          minutesLapse,
+          image,
+        }),
+        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
       });
-    } else {
-      Swal.fire({
-        title: 'Session expired',
-        confirmButtonText: 'Okay',
-      });
-      localStorage.clear();
-      authContext.setToken(false);
-      authContext.setLogged(false);
+      const resJSON = await res.json();
+      const isRegistered = resJSON.ok;
+      if (isRegistered) {
+        setAnnouncementDialog({
+          isOpen: true,
+          title: 'Reminder Created',
+          onConfirm: () => { window.location.href = '/main'; },
+        });
+      } else {
+        setAnnouncementDialog({
+          isOpen: true,
+          title: 'Session expired',
+          onConfirm: () => { window.location.href = '/main'; },
+        });
+        localStorage.clear();
+        authContext.setToken(false);
+        authContext.setLogged(false);
+      }
     }
   };
 
@@ -119,10 +148,9 @@ export function ConfigureReminder() {
                   </LocalizationProvider>
                 </Grid>
                 <Grid item xs={12}>
-                  <InputLabel htmlFor="minutes-lapse-label">Minutes Lapse*</InputLabel>
+                  <InputLabel id="minutes-lapse-label">Minutes Lapse*</InputLabel>
                   <Select
                     labelId="minutes-lapse-label"
-                    id="demo-simple-select"
                     value={minutesLapse}
                     label="Loop minutes"
                     onChange={(e) => setMinutesLapse(e.target.value)}
@@ -150,7 +178,7 @@ export function ConfigureReminder() {
                       <FormControlLabel
                         value={imageArray.id}
                         key={imageArray.id}
-                        control={<Radio icon={<img src={imageArray.ref} width="120" />} checkedIcon={<Box component="img" width="120px" backgroundColor="rgba(207, 204, 206, 0.3)" src={imageArray.ref} />} />}
+                        control={<Radio icon={<img alt={image.altText} src={imageArray.ref} width="120" />} checkedIcon={<Box component="img" width="120px" backgroundColor="rgba(207, 204, 206, 0.3)" src={imageArray.ref} />} />}
                       />
                     ))}
                   </RadioGroup>
@@ -163,6 +191,11 @@ export function ConfigureReminder() {
           </CardContent>
         </Card>
       </Grid>
+      <CustomAlert alert={alert} setAlert={setAlert} />
+      <AnnouncementDialog
+        announcementDialog={announcementDialog}
+        setAnnouncementDialog={setAnnouncementDialog}
+      />
     </div>
   );
 }

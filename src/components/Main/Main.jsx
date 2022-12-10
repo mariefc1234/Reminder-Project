@@ -8,9 +8,9 @@ import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import { Loading } from '../Utilities/Loading/Loading';
 import UserMenu from '../Utilities/Menu/UserMenu';
-import TabReminder from './TabReminder';
+import TabReminder from '../ConfigureReminder/TabReminder';
 import TabStats from './TabStats';
-import TabToDo from './TabToDo';
+import TabToDo from '../ToDos/TabToDo';
 
 export function Main() {
     const authContext = useContext(context);

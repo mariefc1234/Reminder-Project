@@ -3,15 +3,11 @@ import {
 } from '@mui/material';
 import { useState, React } from 'react';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';
-import Popup from '../Utilities/Popup';
 import { useForm } from '../../hooks/useForm';
+import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
 
 export function ContactUs() {
-  const [openPopup, setOpenPopup] = useState(false);
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
-  const [emailError, setEmailError] = useState(false);
-  const [messageError, setMessageError] = useState(false);
+  const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
 
   const initialForm = {
     firstName: '',
@@ -29,21 +25,26 @@ export function ContactUs() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (firstName === '') {
-      setFirstNameError(true);
-    }
-    if (lastName === '') {
-      setLastNameError(true);
-    }
-    if (email === '') {
-      setEmailError(true);
-    }
-    if (message === '') {
-      setMessageError(true);
-    }
-    if (firstName && lastName && email && message) {
-      setOpenPopup(true);
-    }
+    const res = await fetch('http://localhost:8080/api/contact', {
+        method: 'POST',
+        body: JSON.stringify({
+          email,
+          firstName,
+          lastName,
+          message,
+        }),
+        headers: { 'Content-type': 'application/json; charset=UTF-8' },
+      });
+      const resJSON = await res.json();
+      console.log(resJSON);
+      const isRegistered = resJSON.ok;
+      if (isRegistered) {
+        setAnnouncementDialog({
+          isOpen: true,
+          title: 'Thanks for contac us',
+          onConfirm: () => { window.location.href = '/'; },
+        });
+      }
   };
 
   return (
@@ -58,35 +59,32 @@ export function ContactUs() {
             <Typography gutterBottom variant="body2" color="textSecondary" component="p">
               Fill up the form and our team will get back to you within 24 hours.
             </Typography>
-            <form>
+            <form onSubmit={handleSubmit}>
               <Grid container spacing={1}>
                 <Grid item xs={12} sm={6}>
-                  <TextField placeholder="Enter first name" label="First Name" name="firstName" onChange={handleInputChange} error={firstNameError} fullWidth required />
+                  <TextField placeholder="Enter first name" label="First Name" name="firstName" onChange={handleInputChange} fullWidth required />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <TextField placeholder="Enter last name" label="Last Name" name="lastName" onChange={handleInputChange} error={lastNameError} fullWidth required />
+                  <TextField placeholder="Enter last name" label="Last Name" name="lastName" onChange={handleInputChange} fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField type="email" placeholder="Enter email" label="Email" name="email" onChange={handleInputChange} error={emailError} fullWidth required />
+                  <TextField type="email" placeholder="Enter email" label="Email" name="email" onChange={handleInputChange} fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <TextField label="Message" multiline rows={4} placeholder="Type your message here" name="message" onChange={handleInputChange} error={messageError} fullWidth required />
+                  <TextField label="Message" multiline rows={4} placeholder="Type your message here" name="message" onChange={handleInputChange} fullWidth required />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" onClick={handleSubmit} variant="defaultButton" fullWidth>Submit</Button>
+                  <Button type="submit" variant="defaultButton" fullWidth>Submit</Button>
                 </Grid>
               </Grid>
             </form>
           </CardContent>
         </Card>
       </Grid>
-      <Popup
-        title="Forgot password?"
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-      >
-        <Typography component="p" variant="body1">Thanks for contact us...</Typography>
-      </Popup>
+      <AnnouncementDialog
+        announcementDialog={announcementDialog}
+        setAnnouncementDialog={setAnnouncementDialog}
+      />
     </div>
   );
 }

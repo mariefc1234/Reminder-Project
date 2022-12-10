@@ -1,23 +1,27 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext, useState } from 'react';
-import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import {
-  Alert,
-  Button, Card, CardContent, Grid, IconButton, InputLabel, Link, Snackbar, TextField, Typography,
+  Button, Card, CardContent, FormControl, Grid, IconButton, InputAdornment,
+  InputLabel, Link, OutlinedInput, TextField, Typography,
 } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { context } from '../../context/authContext';
 import { useForm } from '../../hooks/useForm';
 import GeneralMenu from '../Utilities/Menu/GeneralMenu';
-import Popup from '../Utilities/Popup';
+import Popup from '../Utilities/Dialogs/Popup';
 import { ForgotPassword } from '../ForgotPassword/ForgotPassword';
+import CustomAlert from '../Utilities/Dialogs/CustomAlert';
+import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
 
 export function Signin() {
   const navigate = useNavigate();
   const authContext = useContext(context);
   const [openPopup, setOpenPopup] = useState(false);
-  const [openAlert, setOpenAlert] = useState(false);
+  const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'error' });
+  const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
+  const [passwordShown, setPasswordShown] = useState(false);
 
   const initialForm = {
       email: '',
@@ -45,24 +49,30 @@ export function Signin() {
       await authContext.setToken(resJSON.data.token);
       await authContext.setLogged(true);
     } else {
-      Swal.fire({
-        title: 'Error',
-        text: 'Incorrect Credentials',
-        icon: 'error',
+      setAnnouncementDialog({
+        isOpen: true,
+        title: 'Incorrect credentials',
+        onConfirm: () => {
+          setAnnouncementDialog({
+          ...announcementDialog,
+                    isOpen: false,
+          });
+        },
       });
     }
   };
 
-  const handleCloseAlert = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpenAlert(false);
+  const togglePassword = () => {
+    setPasswordShown(!passwordShown);
   };
 
-  const isEmailSent = (emailSent) => {
-    if (emailSent) {
-      setOpenAlert(true);
+  const isEmailSent = (status, text, severity) => {
+    if (status) {
+      setAlert({
+        isOpen: true,
+        message: text,
+        severity,
+      });
     }
   };
 
@@ -83,10 +93,32 @@ export function Signin() {
                 </Grid>
                 <Grid item xs={12}>
                   <InputLabel htmlFor="password">Password*</InputLabel>
-                  <TextField fullWidth id="password" type="password" placeholder="Enter your password" variant="outlined" name="password" onChange={handleInputChange} required />
-                  <Link underline="hover" variant="body2" onClick={() => setOpenPopup(true)} sx={{ color: 'text.secondary', cursor: 'pointer' }}>
-                    Forgot Password?
-                  </Link>
+                  <FormControl variant="outlined" fullWidth>
+                    <OutlinedInput
+                      id="password"
+                      type={passwordShown ? 'text' : 'password'}
+                      name="password"
+                      placeholder="Enter your password"
+                      onChange={handleInputChange}
+                      required
+                      endAdornment={(
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={togglePassword}
+                            edge="end"
+                          >
+                            {passwordShown ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                    )}
+                    />
+                  </FormControl>
+                  <Grid item xs={12}>
+                    <Link underline="hover" variant="body2" onClick={() => setOpenPopup(true)} sx={{ color: 'text.secondary', cursor: 'pointer' }}>
+                      Forgot Password?
+                    </Link>
+                  </Grid>
                 </Grid>
                 <Grid item xs={12} mt={2} mb={1}>
                   <Button fullWidth type="submit" variant="defaultButton">Sign In</Button>
@@ -110,25 +142,11 @@ export function Signin() {
       >
         <ForgotPassword isEmailSent={isEmailSent} />
       </Popup>
-      <Snackbar open={openAlert} autoHideDuration={6000} onClose={handleCloseAlert}>
-        <Alert
-          action={(
-            <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                setOpenAlert(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          )}
-          sx={{ mb: 2 }}
-        >
-          Email Sent
-        </Alert>
-      </Snackbar>
+      <CustomAlert alert={alert} setAlert={setAlert} />
+      <AnnouncementDialog
+        announcementDialog={announcementDialog}
+        setAnnouncementDialog={setAnnouncementDialog}
+      />
     </div>
   );
 }

@@ -7,6 +7,7 @@ import { React, useState } from 'react';
 import { useForm } from '../../hooks/useForm';
 
 export function ForgotPassword(props) {
+  const { isEmailSent } = props;
   const [emailError, setEmailError] = useState(false);
   const initialForm = {
     email: '',
@@ -30,26 +31,25 @@ export function ForgotPassword(props) {
     });
 
     const resJSON = await res.json();
-    console.log(resJSON);
     const isSent = resJSON.ok;
 
     if (isSent) {
-      props.isEmailSent(true);
+      isEmailSent(true, 'Email sent.', 'success');
     } else {
-      props.isEmailSent(false);
+      isEmailSent(true, 'Email not sent.', 'success');
     }
     }
   };
 
   return (
-    <form>
+    <form onSubmit={handleClick}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <InputLabel htmlFor="email">Email address*</InputLabel>
           <TextField fullWidth id="email" type="email" placeholder="Enter your email" variant="outlined" name="email" onChange={handleInputChange} error={emailError} required />
         </Grid>
         <Grid item xs={12} mt={2}>
-          <Button fullWidth type="submit" variant="defaultButton" onClick={handleClick}>Reset password</Button>
+          <Button fullWidth type="submit" variant="defaultButton">Reset password</Button>
         </Grid>
       </Grid>
     </form>

@@ -1,5 +1,4 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
@@ -31,7 +30,7 @@ export function EditReminder(reminder1) {
   const authContext = useContext(context);
   const [startHour, setStartHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourBegin}`));
   const [endHour, setEndHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourEnd}`));
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(0);
   const [minutesLapse, setMinutesLapse] = React.useState(reminder.minutesLapse);
 
   const initialForm = {
@@ -42,34 +41,52 @@ export function EditReminder(reminder1) {
     title,
   } = formValues;
 
+  const validateForm = () => {
+    if (endHour.isBefore(startHour) || endHour.isSame(startHour)) {
+      isReminderEdited(false, 'Invalid Hour.', 'error');
+      return false;
+    }
+    if (minutesLapse.valueOf() === '0') {
+      isReminderEdited(false, 'Invalid minutes lapse.', 'error');
+      return false;
+    }
+    if (image === 0) {
+      isReminderEdited(false, 'Please select an image.', 'error');
+      return false;
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const hourBegin = startHour.format('HH:mm');
     const hourEnd = endHour.format('HH:mm');
-    const res = await fetch(`http://localhost:8080/api/reminder/${reminder.id}`, {
-      method: 'PUT',
-      body: JSON.stringify({
-        name: title,
-        hourBegin,
-        hourEnd,
-        minutesLapse,
-        image,
-      }),
-      headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
-    });
-    const resJSON = await res.json();
-    const respEdited = resJSON.msg;
-    if (respEdited) {
-      setReminders(reminders.map((rem) => ((rem.id === reminder.id) ? {
-        ...rem,
-        name: title,
-        hourBegin,
-        hourEnd,
-        minutesLapse,
-        image,
-        url: images[image - 1].ref,
-      } : rem)));
-      isReminderEdited(true);
+    if (validateForm()) {
+      const res = await fetch(`http://localhost:8080/api/reminder/${reminder.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+          name: title,
+          hourBegin,
+          hourEnd,
+          minutesLapse,
+          image,
+        }),
+        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+      });
+      const resJSON = await res.json();
+      const respEdited = resJSON.msg;
+      if (respEdited) {
+        setReminders(reminders.map((rem) => ((rem.id === reminder.id) ? {
+          ...rem,
+          name: title,
+          hourBegin,
+          hourEnd,
+          minutesLapse,
+          image,
+          url: images[image - 1].ref,
+        } : rem)));
+        isReminderEdited(true, 'Reminder saved successfully.', 'success');
+      }
     }
   };
 
