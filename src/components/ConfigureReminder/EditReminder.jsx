@@ -1,11 +1,10 @@
 /* eslint-disable react/prop-types */
-/* eslint-disable no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   Button, FormControlLabel, FormLabel, Grid,
   InputLabel, MenuItem, Radio, RadioGroup, Select, TextField,
@@ -34,11 +33,10 @@ export function EditReminder(reminder1) {
   const [endHour, setEndHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourEnd}`));
   const [image, setImage] = useState('');
   const [minutesLapse, setMinutesLapse] = React.useState(reminder.minutesLapse);
+
   const initialForm = {
     title: reminder.name,
-
   };
-
   const [formValues, handleInputChange] = useForm(initialForm);
   const {
     title,
@@ -60,8 +58,8 @@ export function EditReminder(reminder1) {
       headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
     });
     const resJSON = await res.json();
-    const isEdited = resJSON.msg;
-    if (isEdited) {
+    const respEdited = resJSON.msg;
+    if (respEdited) {
       setReminders(reminders.map((rem) => ((rem.id === reminder.id) ? {
         ...rem,
         name: title,

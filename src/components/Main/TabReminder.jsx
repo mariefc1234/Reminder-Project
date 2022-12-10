@@ -1,8 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
-  Alert,
- Box, Button, Grid, IconButton, Paper, Snackbar, Typography,
+  Alert, Box, Button, Grid, IconButton, Paper, Snackbar, Typography,
 } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -17,7 +16,6 @@ import Popup from '../Utilities/Popup';
 import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import { Loading } from '../Utilities/Loading/Loading';
-// import imgfd from '../../img/logo.png';
 
 export default function TabReminder(props) {
   const authContext = useContext(context);
@@ -31,7 +29,7 @@ export default function TabReminder(props) {
   const urlReminder = 'http://localhost:8080/api/reminder';
   const { data, loading } = useFetchGet(urlReminder, authContext.token);
 
-  const openInPopup = (item, rem) => {
+  const openInPopup = (rem) => {
       setReminderObject(rem);
       setOpenPopup(true);
   };
@@ -57,9 +55,8 @@ export default function TabReminder(props) {
   }, [loading]);
 
   const deleteItem = async (item) => {
-    // DELETE http://localhost:8080/api/reminder/item
     Swal.fire({
-      title: `Are you sure?${item}`,
+      title: 'Are you sure?',
       text: "You won't be able to revert this!",
       icon: 'warning',
       showCancelButton: true,
@@ -98,7 +95,6 @@ export default function TabReminder(props) {
             (loading)
             ? <Loading />
             : reminders.map((reminder) => (
-
               <Grid item xs={12} sm={12} md={4} key={reminder.id}>
                 <Paper style={{ padding: '20px' }}>
                   <Grid item display="flex" justifyContent="space-between">
@@ -106,7 +102,7 @@ export default function TabReminder(props) {
                       <img alt="complex" width="100px" src={reminder.url} />
                     </Box>
                     <Grid item>
-                      <IconButton onClick={() => { openInPopup(reminder.id, reminder); }} aria-label="edit">
+                      <IconButton onClick={() => { openInPopup(reminder); }} aria-label="edit">
                         <EditIcon />
                       </IconButton>
                       <IconButton

@@ -11,7 +11,6 @@ import UserMenu from '../Utilities/Menu/UserMenu';
 import TabReminder from './TabReminder';
 import TabStats from './TabStats';
 import TabToDo from './TabToDo';
-import CarouselSlide from './CarouselSlide';
 
 export function Main() {
     const authContext = useContext(context);

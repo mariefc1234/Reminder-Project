@@ -84,7 +84,7 @@ export function Signin() {
                 <Grid item xs={12}>
                   <InputLabel htmlFor="password">Password*</InputLabel>
                   <TextField fullWidth id="password" type="password" placeholder="Enter your password" variant="outlined" name="password" onChange={handleInputChange} required />
-                  <Link underline="hover" variant="body2" onClick={() => setOpenPopup(true)} sx={{ color: 'text.secondary' }}>
+                  <Link underline="hover" variant="body2" onClick={() => setOpenPopup(true)} sx={{ color: 'text.secondary', cursor: 'pointer' }}>
                     Forgot Password?
                   </Link>
                 </Grid>
@@ -95,7 +95,7 @@ export function Signin() {
                   <Typography variant="body1" gutterBottom>
                     Not a member?
                     {' '}
-                    <Link underline="hover" variant="body1" onClick={() => navigate('/signup')}> Sign up now </Link>
+                    <Link underline="hover" variant="body1" onClick={() => navigate('/signup')} style={{ cursor: 'pointer' }}> Sign up now </Link>
                   </Typography>
                 </Grid>
               </Grid>

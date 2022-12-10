@@ -1,10 +1,7 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-// falta agregar el navigation cuando esten bien los datos
 import React, { useContext, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import {
@@ -20,7 +17,6 @@ import Swal from 'sweetalert2';
 import { context } from '../../context/authContext';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import { useForm } from '../../hooks/useForm';
-import { forceLogout } from '../../helpers/unauthorized';
 
 const images = [
   { id: 1, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
@@ -31,7 +27,6 @@ const images = [
 const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
 
 export function ConfigureReminder() {
-  // const navigate = useNavigate();
   const [startHour, setStartHour] = React.useState(dayjs('2022-11-22'));
   const [endHour, setEndHour] = React.useState(dayjs('2022-11-22'));
   const [minutesLapse, setMinutesLapse] = React.useState('0');
@@ -132,7 +127,14 @@ export function ConfigureReminder() {
                     label="Loop minutes"
                     onChange={(e) => setMinutesLapse(e.target.value)}
                   >
-                    {minutes.map((minute) => <MenuItem key={minute} value={minute}>{minute}</MenuItem>)}
+                    {minutes.map((minute) => (
+                      <MenuItem
+                        key={minute}
+                        value={minute}
+                      >
+                        {minute}
+                      </MenuItem>
+                  ))}
                   </Select>
                 </Grid>
                 <Grid item xs={12}>

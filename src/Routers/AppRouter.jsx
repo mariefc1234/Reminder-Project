@@ -16,6 +16,7 @@ import { ConfigureReminder } from '../components/ConfigureReminder/ConfigureRemi
 import { AboutUs } from '../components/AboutUs/AboutUs';
 import { ContactUs } from '../components/ContactUs/ContactUs';
 import { HealthyTips } from '../components/HealthyTips/HealthyTips';
+import ToDoForm from '../components/ToDos/ToDoForm';
 
 export function AppRouter() {
     return (
@@ -100,6 +101,14 @@ export function AppRouter() {
                 element={(
                   <PublicRoutes>
                     <HealthyTips />
+                  </PublicRoutes>
+                            )}
+              />
+              <Route
+                path="/todo"
+                element={(
+                  <PublicRoutes>
+                    <ToDoForm />
                   </PublicRoutes>
                             )}
               />
