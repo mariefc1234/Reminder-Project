@@ -17,6 +17,9 @@ import { AboutUs } from '../components/AboutUs/AboutUs';
 import { ContactUs } from '../components/ContactUs/ContactUs';
 import { HealthyTips } from '../components/HealthyTips/HealthyTips';
 import ToDoForm from '../components/ToDos/ToDoForm';
+import ChangeUserInfo from '../components/UserSettings/ChangeUserInfo';
+import ChangePassword from '../components/UserSettings/ChangePassword';
+import PleaseConfirm from '../components/ConfirmEmail/PleaseConfirm';
 
 export function AppRouter() {
     return (
@@ -110,6 +113,30 @@ export function AppRouter() {
                   <PublicRoutes>
                     <ToDoForm />
                   </PublicRoutes>
+                            )}
+              />
+              <Route
+                path="/changepassword"
+                element={(
+                  <ProtectedRoutes>
+                    <ChangePassword />
+                  </ProtectedRoutes>
+                            )}
+              />
+              <Route
+                path="/changeuserinfo"
+                element={(
+                  <ProtectedRoutes>
+                    <ChangeUserInfo />
+                  </ProtectedRoutes>
+                            )}
+              />
+              <Route
+                path="/pleaseconfirmmail"
+                element={(
+                  <ProtectedRoutes>
+                    <PleaseConfirm />
+                  </ProtectedRoutes>
                             )}
               />
             </Routes>

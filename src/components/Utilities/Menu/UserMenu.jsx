@@ -89,13 +89,13 @@ function UserMenu() {
               onClose={handleCloseUserMenu}
             >
               <MenuItem onClick={() => navigate('/main')}>
-                <Typography textAlign="center">Profile</Typography>
+                <Typography textAlign="center">Home</Typography>
               </MenuItem>
-              <MenuItem onClick={() => navigate('/main')}>
-                <Typography textAlign="center">Account</Typography>
+              <MenuItem onClick={() => navigate('/changeuserinfo')}>
+                <Typography textAlign="center">User info</Typography>
               </MenuItem>
-              <MenuItem onClick={() => navigate('/main')}>
-                <Typography textAlign="center">Dashboard</Typography>
+              <MenuItem onClick={() => navigate('/changepassword')}>
+                <Typography textAlign="center">Change Password</Typography>
               </MenuItem>
               <MenuItem onClick={handleLogout}>
                 <Typography textAlign="center">Logout</Typography>

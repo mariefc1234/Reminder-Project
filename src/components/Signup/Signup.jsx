@@ -12,6 +12,7 @@ import GeneralMenu from '../Utilities/Menu/GeneralMenu';
 import { useForm } from '../../hooks/useForm';
 import { context } from '../../context/authContext';
 import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
+import CustomAlert from '../Utilities/Dialogs/CustomAlert';
 
 export function Signup() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export function Signup() {
   const authContext = useContext(context);
   const [usernameError, setUsernameError] = useState(false);
   const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
+  const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'warning' });
   const [passwordShown, setPasswordShown] = useState(false);
 
   const initialForm = {
@@ -37,6 +39,17 @@ export function Signup() {
     e.preventDefault();
     if (username.indexOf(' ') >= 0) {
       setUsernameError(true);
+      setAlert({
+        isOpen: true,
+        message: 'Username should not contain spaces',
+        severity: 'error',
+      });
+    } else if (password !== confPassword) {
+      setAlert({
+        isOpen: true,
+        message: "Passwords doesn't match",
+        severity: 'error',
+      });
     } else {
       const res = await fetch('http://localhost:8080/api/auth/register', {
         method: 'POST',
@@ -201,6 +214,7 @@ export function Signup() {
         announcementDialog={announcementDialog}
         setAnnouncementDialog={setAnnouncementDialog}
       />
+      <CustomAlert alert={alert} setAlert={setAlert} />
     </div>
   );
 }

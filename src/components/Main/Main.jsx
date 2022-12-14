@@ -20,7 +20,9 @@ export function Main() {
 
     useEffect(() => {
       if (data) {
-        if (data.data.isregistered === 0) {
+        if (data.data.emailconfirmed === 0) {
+          navigate('/pleaseconfirmmail', { replace: true });
+        } else if (data.data.isregistered === 0) {
           navigate('/userinforegister', { replace: true });
         }
       }

@@ -20,14 +20,11 @@ export default function ToDoForm(paramsToDo) {
   const authContext = useContext(context);
   const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
 
-  const handleInput = (val) => {
-    setDescription(val.target.value);
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!dayjs().isSame(date)) {
+    const dateD = dayjs().add(1, 'minutes');
+    // console.log(dateD);
+    if (!dateD.isSame(date)) {
       const endDate = dayjs(date).valueOf();
       if (isEdited) {
         // Edit to do
@@ -60,7 +57,6 @@ export default function ToDoForm(paramsToDo) {
           headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
         });
         const resJSON = await res.json();
-        console.log(resJSON);
         const isRegistered = resJSON.ok;
         if (isRegistered) {
           isCompleted(true, 'To Do saved successfully.', 'success');
@@ -98,7 +94,9 @@ export default function ToDoForm(paramsToDo) {
             name="description"
             size="small"
             value={description}
-            onChange={handleInput}
+            onChange={(newValue) => {
+              setDescription(newValue.target.value);
+            }}
             required
           />
         </Grid>

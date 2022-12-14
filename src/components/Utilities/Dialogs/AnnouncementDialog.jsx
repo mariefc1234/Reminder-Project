@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import {
-  Button, Dialog, DialogActions, DialogContent, Typography,
+  Button, Dialog, DialogActions, DialogContent, Stack, Typography,
 } from '@mui/material';
 import React from 'react';
 
@@ -18,12 +18,14 @@ export default function AnnouncemenDialog(props) {
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button
-          variant="menuButton"
-          onClick={announcementDialog.onConfirm}
-        >
-          Accept
-        </Button>
+        <Stack style={{ width: '100%' }} display="flex" justifyContent="center">
+          <Button
+            variant="menuButton"
+            onClick={announcementDialog.onConfirm}
+          >
+            Accept
+          </Button>
+        </Stack>
       </DialogActions>
     </Dialog>
   );

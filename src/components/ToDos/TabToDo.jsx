@@ -34,6 +34,7 @@ export default function TabToDo(props) {
 
   const isCompleted = (status, text, severity) => {
     if (status) {
+      window.location.reload();
       setOpenPopup(false);
     }
     setAlert({

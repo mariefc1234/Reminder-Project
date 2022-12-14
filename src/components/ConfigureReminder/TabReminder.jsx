@@ -4,12 +4,11 @@ import {
   Box, Button, Grid, IconButton, Paper, Typography,
 } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoopIcon from '@mui/icons-material/Loop';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import { EditReminder } from './EditReminder';
+import { ReminderForm } from './ReminderForm';
 import Popup from '../Utilities/Dialogs/Popup';
 import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
@@ -20,12 +19,12 @@ import ConfirmDialog from '../Utilities/Dialogs/ConfirmDialog';
 export default function TabReminder(props) {
   const authContext = useContext(context);
   const { value, index } = props;
-  const navigate = useNavigate();
   const [openPopup, setOpenPopup] = useState(false);
   const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'warning' });
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' });
   const [reminderObject, setReminderObject] = useState(null);
   const [reminders, setReminders] = useState([]);
+  const [isEdited, setIsEdited] = useState(false);
 
   const urlReminder = 'http://localhost:8080/api/reminder';
   const { data, loading } = useFetchGet(urlReminder, authContext.token);
@@ -35,8 +34,9 @@ export default function TabReminder(props) {
       setOpenPopup(true);
   };
 
-  const isReminderEdited = (status, text, severity) => {
+  const isCompleted = (status, text, severity) => {
     if (status) {
+      window.location.reload();
       setOpenPopup(false);
     }
     setAlert({
@@ -80,7 +80,7 @@ export default function TabReminder(props) {
       value === index && (
         <Grid container style={{ maxWidth: '90%', padding: '5px 5px', margin: '0 auto' }} spacing={1}>
           <Grid item xs={12} display="flex" flexDirection="row-reverse">
-            <Button width="150" onClick={() => navigate('/configurereminder')} variant="defaultButton">Create Reminder</Button>
+            <Button width="150" onClick={() => { openInPopup(); setIsEdited(false); }} variant="defaultButton">Create Reminder</Button>
           </Grid>
           {
             (loading)
@@ -93,7 +93,7 @@ export default function TabReminder(props) {
                       <img alt="complex" width="100px" src={reminder.url} />
                     </Box>
                     <Grid item>
-                      <IconButton onClick={() => { openInPopup(reminder); }} aria-label="edit">
+                      <IconButton onClick={() => { openInPopup(reminder); setIsEdited(true); }} aria-label="edit">
                         <EditIcon />
                       </IconButton>
                       <IconButton
@@ -137,11 +137,12 @@ export default function TabReminder(props) {
         openPopup={openPopup}
         setOpenPopup={setOpenPopup}
       >
-        <EditReminder
+        <ReminderForm
           reminder={reminderObject}
+          isEdited={isEdited}
           reminders={reminders}
           setReminders={setReminders}
-          isReminderEdited={isReminderEdited}
+          isCompleted={isCompleted}
         />
       </Popup>
       <CustomAlert alert={alert} setAlert={setAlert} />

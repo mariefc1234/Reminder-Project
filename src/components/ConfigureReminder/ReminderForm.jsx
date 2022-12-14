@@ -3,7 +3,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button, FormControlLabel, FormLabel, Grid,
   InputLabel, MenuItem, Radio, RadioGroup, Select, TextField,
@@ -13,7 +13,7 @@ import { LocalizationProvider, TimePicker } from '@mui/x-date-pickers';
 import { Box } from '@mui/system';
 import dayjs from 'dayjs';
 import { context } from '../../context/authContext';
-import { useForm } from '../../hooks/useForm';
+import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
 
 const images = [
   { id: 1, title: 'Clock', ref: 'https://cdn-icons-png.flaticon.com/512/3073/3073471.png' },
@@ -23,35 +23,30 @@ const images = [
 
 const minutes = ['0', '5', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55', '60'];
 
-export function EditReminder(reminder1) {
+export function ReminderForm(param) {
   const {
-    reminder, reminders, setReminders, isReminderEdited,
-  } = reminder1;
-  const authContext = useContext(context);
-  const [startHour, setStartHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourBegin}`));
-  const [endHour, setEndHour] = React.useState(dayjs(`2022-11-22 ${reminder.hourEnd}`));
-  const [image, setImage] = useState(0);
-  const [minutesLapse, setMinutesLapse] = React.useState(reminder.minutesLapse);
+    reminder, isEdited, isCompleted, reminders, setReminders,
+  } = param;
 
-  const initialForm = {
-    title: reminder.name,
-  };
-  const [formValues, handleInputChange] = useForm(initialForm);
-  const {
-    title,
-  } = formValues;
+  const authContext = useContext(context);
+  const [title, setTitle] = useState('');
+  const [startHour, setStartHour] = React.useState(dayjs('2022-11-22'));
+  const [endHour, setEndHour] = React.useState(dayjs('2022-11-22'));
+  const [image, setImage] = useState(0);
+  const [minutesLapse, setMinutesLapse] = React.useState('0');
+  const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
 
   const validateForm = () => {
     if (endHour.isBefore(startHour) || endHour.isSame(startHour)) {
-      isReminderEdited(false, 'Invalid Hour.', 'error');
+      isCompleted(false, 'Invalid Hour.', 'error');
       return false;
     }
     if (minutesLapse.valueOf() === '0') {
-      isReminderEdited(false, 'Invalid minutes lapse.', 'error');
+      isCompleted(false, 'Invalid minutes lapse.', 'error');
       return false;
     }
     if (image === 0) {
-      isReminderEdited(false, 'Please select an image.', 'error');
+      isCompleted(false, 'Please select an image.', 'error');
       return false;
     }
     return true;
@@ -62,40 +57,96 @@ export function EditReminder(reminder1) {
     const hourBegin = startHour.format('HH:mm');
     const hourEnd = endHour.format('HH:mm');
     if (validateForm()) {
-      const res = await fetch(`http://localhost:8080/api/reminder/${reminder.id}`, {
-        method: 'PUT',
-        body: JSON.stringify({
-          name: title,
-          hourBegin,
-          hourEnd,
-          minutesLapse,
-          image,
-        }),
-        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
-      });
-      const resJSON = await res.json();
-      const respEdited = resJSON.msg;
-      if (respEdited) {
-        setReminders(reminders.map((rem) => ((rem.id === reminder.id) ? {
-          ...rem,
-          name: title,
-          hourBegin,
-          hourEnd,
-          minutesLapse,
-          image,
-          url: images[image - 1].ref,
-        } : rem)));
-        isReminderEdited(true, 'Reminder saved successfully.', 'success');
+      if (isEdited) {
+        // Edit reminder
+        const res = await fetch(`http://localhost:8080/api/reminder/${reminder.id}`, {
+          method: 'PUT',
+          body: JSON.stringify({
+            name: title,
+            hourBegin,
+            hourEnd,
+            minutesLapse,
+            image,
+          }),
+          headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+        });
+        const resJSON = await res.json();
+        const respEdited = resJSON.msg;
+        if (respEdited) {
+          setReminders(reminders.map((rem) => ((rem.id === reminder.id) ? {
+            ...rem,
+            name: title,
+            hourBegin,
+            hourEnd,
+            minutesLapse,
+            image,
+            url: images[image - 1].ref,
+          } : rem)));
+          isCompleted(true, 'Reminder saved successfully.', 'success');
+        }
+      } else {
+        // Create reminder
+        const res = await fetch('http://localhost:8080/api/reminder', {
+          method: 'POST',
+          body: JSON.stringify({
+            name: title,
+            hourBegin: startHour.format('HH:mm'),
+            hourEnd: endHour.format('HH:mm'),
+            minutesLapse,
+            image,
+          }),
+          headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+        });
+        const resJSON = await res.json();
+        const isRegistered = resJSON.ok;
+        if (isRegistered) {
+          // reminders.push({
+          // name: title, hourBegin, hourEnd, minutesLapse, image, url: images[image - 1].ref,
+          // });
+          isCompleted(true, 'Reminder saved successfully.', 'success');
+        } else {
+          setAnnouncementDialog({
+            isOpen: true,
+            title: 'Session expired',
+            onConfirm: () => { window.location.href = '/main'; },
+          });
+          localStorage.clear();
+          authContext.setToken(false);
+          authContext.setLogged(false);
+        }
       }
     }
   };
+
+  useEffect(() => {
+    if (reminder !== undefined) {
+      setTitle(reminder.name);
+      setStartHour(dayjs(`2022-11-22 ${reminder.hourBegin}`));
+      setEndHour(dayjs(`2022-11-22 ${reminder.hourEnd}`));
+      setImage(reminder.image);
+      setMinutesLapse(reminder.minutesLapse);
+    }
+  }, []);
 
   return (
     <form onSubmit={handleSubmit}>
       <Grid container spacing={1}>
         <Grid item xs={12}>
           <InputLabel htmlFor="title">Title*</InputLabel>
-          <TextField fullWidth id="title" type="text" placeholder="Enter the title" variant="outlined" name="title" value={title} onChange={handleInputChange} size="small" required />
+          <TextField
+            fullWidth
+            id="title"
+            type="text"
+            placeholder="Enter the title"
+            variant="outlined"
+            name="description"
+            value={title}
+            onChange={(newValue) => {
+              setTitle(newValue.target.value);
+            }}
+            size="small"
+            required
+          />
         </Grid>
         <Grid item xs={12} md={6}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -150,7 +201,7 @@ export function EditReminder(reminder1) {
               <FormControlLabel
                 value={imageArray.id}
                 key={imageArray.id}
-                control={<Radio icon={<img src={imageArray.ref} width="120" />} checkedIcon={<Box component="img" width="120px" backgroundColor="rgba(207, 204, 206, 0.3)" src={imageArray.ref} />} />}
+                control={<Radio icon={<img src={imageArray.ref} width="120" />} checkedIcon={<Box component="img" width="120px" backgroundColor="lightgray" sx={{ p: 1 }} src={imageArray.ref} />} />}
               />
             ))}
           </RadioGroup>
@@ -159,6 +210,10 @@ export function EditReminder(reminder1) {
           <Button fullWidth type="submit" variant="defaultButton">Continue</Button>
         </Grid>
       </Grid>
+      <AnnouncementDialog
+        announcementDialog={announcementDialog}
+        setAnnouncementDialog={setAnnouncementDialog}
+      />
     </form>
   );
 }

@@ -36,7 +36,6 @@ export function ContactUs() {
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
       });
       const resJSON = await res.json();
-      console.log(resJSON);
       const isRegistered = resJSON.ok;
       if (isRegistered) {
         setAnnouncementDialog({
