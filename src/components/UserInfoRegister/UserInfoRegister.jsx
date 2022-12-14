@@ -31,7 +31,7 @@ export function UserInfoRegister() {
   } = formValues;
 
   const validateForm = () => {
-    if (weight === 0) {
+    if (weight < 30 || weight > 200) {
       setAlert({
         isOpen: true,
         message: 'Invalid weight',
@@ -39,7 +39,7 @@ export function UserInfoRegister() {
       });
       return false;
     }
-    if (height === 0) {
+    if (height < 140 || height > 210) {
       setAlert({
         isOpen: true,
         message: 'Invalid height',
@@ -123,7 +123,7 @@ export function UserInfoRegister() {
                     type="number"
                     onChange={handleInputChange}
                     InputProps={{
-                      inputProps: { max: 200, min: 130 },
+                      inputProps: { max: 210, min: 130 },
                       startAdornment: <InputAdornment position="start">cm</InputAdornment>,
                     }}
                   />

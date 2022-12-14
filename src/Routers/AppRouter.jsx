@@ -18,8 +18,10 @@ import { ContactUs } from '../components/ContactUs/ContactUs';
 import { HealthyTips } from '../components/HealthyTips/HealthyTips';
 import ToDoForm from '../components/ToDos/ToDoForm';
 import ChangeUserInfo from '../components/UserSettings/ChangeUserInfo';
-import ChangePassword from '../components/UserSettings/ChangePassword';
+import ChangePassword from '../components/ChangePassword/ChangePassword';
 import PleaseConfirm from '../components/ConfirmEmail/PleaseConfirm';
+import { EmailConfirmed } from '../components/ConfirmEmail/EmailConfirmed';
+import ChangeUserPassword from '../components/UserSettings/ChangeUserPassword';
 
 export function AppRouter() {
     return (
@@ -116,14 +118,6 @@ export function AppRouter() {
                             )}
               />
               <Route
-                path="/changepassword"
-                element={(
-                  <ProtectedRoutes>
-                    <ChangePassword />
-                  </ProtectedRoutes>
-                            )}
-              />
-              <Route
                 path="/changeuserinfo"
                 element={(
                   <ProtectedRoutes>
@@ -136,6 +130,27 @@ export function AppRouter() {
                 element={(
                   <ProtectedRoutes>
                     <PleaseConfirm />
+                  </ProtectedRoutes>
+                            )}
+              />
+              <Route
+                path="/confirmation"
+                component={EmailConfirmed}
+                element={(
+                  <EmailConfirmed />
+                            )}
+              />
+              <Route
+                path="/resetPass"
+                element={(
+                  <ChangePassword />
+                )}
+              />
+              <Route
+                path="/changeuserpassword"
+                element={(
+                  <ProtectedRoutes>
+                    <ChangeUserPassword />
                   </ProtectedRoutes>
                             )}
               />

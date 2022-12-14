@@ -1,17 +1,19 @@
 /* eslint-disable max-len */
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Button, Card, CardContent, FormControl, FormControlLabel, FormLabel, Grid,
   InputAdornment, InputLabel, Radio, RadioGroup, TextField, Typography,
 } from '@mui/material';
 import UserMenu from '../Utilities/Menu/UserMenu';
-// import { context } from '../../context/authContext';
+import { context } from '../../context/authContext';
 import CustomAlert from '../Utilities/Dialogs/CustomAlert';
 import AnnouncementDialog from '../Utilities/Dialogs/AnnouncementDialog';
+import { useFetchGet } from '../../hooks/useFetchGet';
 
 export default function ChangeUserInfo() {
   // const { userInfo } = params;
-  // const authContext = useContext(context);
+  const authContext = useContext(context);
+  const { data } = useFetchGet('http://localhost:8080/api/user/data', authContext.token);
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [gender, setGender] = React.useState('');
@@ -21,39 +23,37 @@ export default function ChangeUserInfo() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // const res = await fetch('http://localhost:8080/api/auth/registerdata', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //   weight,
-    //   height,
-    //   gender,
-    //   activity,
-    //   }),
-    //   headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
-    // });
-    // const resJSON = await res.json();
-
-    // const isRegistered = resJSON.ok;
-
-    // if (isRegistered) {
-    //   window.location.href = '/main';
-    // }
-    setAnnouncementDialog({
-      isOpen: true,
-      title: 'Info Registered',
-      onConfirm: () => { window.location.href = '/'; },
+    const res = await fetch('http://localhost:8080/api/user', {
+      method: 'PATCH',
+      body: JSON.stringify({
+      weight,
+      height,
+      genre: gender,
+      activity,
+      }),
+      headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
     });
+    const resJSON = await res.json();
+
+    const isUpdated = resJSON.ok;
+
+    if (isUpdated) {
+      setAnnouncementDialog({
+        isOpen: true,
+        title: 'Info Registered',
+        onConfirm: () => { window.location.href = '/main'; },
+      });
+    }
   };
 
   useEffect(() => {
-      // setWeight(userInfo.weight);
-      // setActivity(userInfo.activity);
-      // setGender(userInfo.genre);
-      setWeight(65);
-      setHeight(150);
-      setGender('M');
-      setActivity(2);
-  }, []);
+    if (data) {
+      setWeight(data.data.weight);
+      setHeight(data.data.height);
+      setActivity(data.data.activity);
+      setGender(data.data.genre);
+      }
+  }, [data]);
 
   return (
     <div>

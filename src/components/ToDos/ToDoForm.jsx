@@ -23,7 +23,6 @@ export default function ToDoForm(paramsToDo) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const dateD = dayjs().add(1, 'minutes');
-    // console.log(dateD);
     if (!dateD.isSame(date)) {
       const endDate = dayjs(date).valueOf();
       if (isEdited) {

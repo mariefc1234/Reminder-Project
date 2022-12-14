@@ -1,12 +1,10 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from 'react';
-import { Box, Tab, Tabs } from '@mui/material';
+import { Tab, Tabs } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
-import { Loading } from '../Utilities/Loading/Loading';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import TabReminder from '../ConfigureReminder/TabReminder';
 import TabStats from './TabStats';
@@ -16,12 +14,12 @@ export function Main() {
     const authContext = useContext(context);
     const navigate = useNavigate();
 
-    const { data, loading, error } = useFetchGet('http://localhost:8080/api/user', authContext.token);
+    const { data } = useFetchGet('http://localhost:8080/api/user', authContext.token);
 
     useEffect(() => {
       if (data) {
         if (data.data.emailconfirmed === 0) {
-          navigate('/pleaseconfirmmail', { replace: true });
+          navigate('/pleaseconfirmmail');
         } else if (data.data.isregistered === 0) {
           navigate('/userinforegister', { replace: true });
         }

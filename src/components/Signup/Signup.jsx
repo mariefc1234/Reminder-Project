@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useContext, useState } from 'react';
 import PasswordChecklist from 'react-password-checklist';
@@ -77,6 +78,11 @@ export function Signup() {
       }
 
       if (isRegistered) {
+        await fetch('http://localhost:8080/api/email/sendConfirmation', {
+          method: 'POST',
+          headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: resJSON.data.token },
+        });
+
         authContext.setLogged(true);
         authContext.setToken(resJSON.data.token);
       } else {

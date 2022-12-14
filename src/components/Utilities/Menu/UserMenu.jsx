@@ -94,7 +94,7 @@ function UserMenu() {
               <MenuItem onClick={() => navigate('/changeuserinfo')}>
                 <Typography textAlign="center">User info</Typography>
               </MenuItem>
-              <MenuItem onClick={() => navigate('/changepassword')}>
+              <MenuItem onClick={() => navigate('/changeuserpassword')}>
                 <Typography textAlign="center">Change Password</Typography>
               </MenuItem>
               <MenuItem onClick={handleLogout}>
