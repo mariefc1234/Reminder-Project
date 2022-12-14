@@ -7,7 +7,7 @@ import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import TabReminder from '../ConfigureReminder/TabReminder';
-import TabStats from './TabStats';
+import TabStats from '../Stats/TabStats';
 import TabToDo from '../ToDos/TabToDo';
 
 export function Main() {
