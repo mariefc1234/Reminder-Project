@@ -16,8 +16,8 @@ export function AuthProvider({ children }) {
     }, [token]);
     return (
       <context.Provider value={{
- logged, setLogged, token, setToken,
-}}
+        logged, setLogged, token, setToken,
+      }}
       >
         {children}
       </context.Provider>

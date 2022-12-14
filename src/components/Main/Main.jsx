@@ -9,6 +9,7 @@ import UserMenu from '../Utilities/Menu/UserMenu';
 import TabReminder from '../ConfigureReminder/TabReminder';
 import TabStats from '../Stats/TabStats';
 import TabToDo from '../ToDos/TabToDo';
+import { Notify } from '../Notify/Notify';
 
 export function Main() {
     const authContext = useContext(context);
@@ -33,6 +34,7 @@ export function Main() {
     return (
       <div>
         <UserMenu />
+        <Notify />
         <Tabs value={tabValue} onChange={handleTabs} centered>
           <Tab label="Reminder" />
           <Tab label="Stats" />
