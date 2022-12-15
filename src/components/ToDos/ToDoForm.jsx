@@ -20,10 +20,21 @@ export default function ToDoForm(paramsToDo) {
   const authContext = useContext(context);
   const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
 
+  const validateForm = () => {
+    if (/^\s*$/.test(description)) {
+      isCompleted(false, 'Please enter a valid description', 'error');
+      return false;
+    }
+    const dateD = dayjs().add(1, 'minutes');
+    if (dateD.isSame(date)) {
+      isCompleted(false, 'Please enter a valid date', 'error');
+    }
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const dateD = dayjs().add(1, 'minutes');
-    if (!dateD.isSame(date)) {
+    if (validateForm()) {
       const endDate = dayjs(date).valueOf();
       if (isEdited) {
         // Edit to do

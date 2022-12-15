@@ -37,6 +37,10 @@ export function ReminderForm(param) {
   const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
 
   const validateForm = () => {
+    if (/^\s*$/.test(title)) {
+      isCompleted(false, 'Please enter a valid title', 'error');
+      return false;
+    }
     if (endHour.isBefore(startHour) || endHour.isSame(startHour)) {
       isCompleted(false, 'Invalid Hour.', 'error');
       return false;

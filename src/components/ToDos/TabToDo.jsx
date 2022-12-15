@@ -60,7 +60,7 @@ export default function TabToDo(props) {
       setActiveTodos(activeTodos.filter((todo) => todo.id !== item));
       setAlert({
         isOpen: true,
-        message: 'To Do deleted successfully',
+        message: 'To Do deleted completed successfully',
         severity: 'success',
       });
     }
