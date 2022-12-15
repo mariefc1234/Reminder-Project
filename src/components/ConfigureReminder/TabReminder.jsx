@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {
-  Box, Button, Grid, IconButton, Paper, Typography,
+  Box, Button, Grid, IconButton, Paper, Stack, Typography,
 } from '@mui/material';
 import React, { useState, useContext, useEffect } from 'react';
 import ScheduleIcon from '@mui/icons-material/Schedule';
@@ -85,9 +85,9 @@ export default function TabReminder(props) {
       {
       value === index && (
         <Grid container style={{ maxWidth: '90%', padding: '5px 5px', margin: '0 auto' }} spacing={1}>
-          <Grid item xs={12} display="flex" flexDirection="row-reverse">
+          <Stack direction={{ xs: 'column', sm: 'row' }} mb={1} style={{ width: '100%' }} display="flex" justifyContent="end">
             <Button width="150" onClick={() => { openInPopup(); setIsEdited(false); }} variant="defaultButton">Create Reminder</Button>
-          </Grid>
+          </Stack>
           {
             (loading)
             ? <Loading />

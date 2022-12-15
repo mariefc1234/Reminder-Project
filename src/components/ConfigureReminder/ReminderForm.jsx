@@ -100,9 +100,6 @@ export function ReminderForm(param) {
         const resJSON = await res.json();
         const isRegistered = resJSON.ok;
         if (isRegistered) {
-          // reminders.push({
-          // name: title, hourBegin, hourEnd, minutesLapse, image, url: images[image - 1].ref,
-          // });
           isCompleted(true, 'Reminder saved successfully.', 'success');
         } else {
           setAnnouncementDialog({

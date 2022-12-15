@@ -23,6 +23,7 @@ import PleaseConfirm from '../components/ConfirmEmail/PleaseConfirm';
 import { EmailConfirmed } from '../components/ConfirmEmail/EmailConfirmed';
 import ChangeUserPassword from '../components/UserSettings/ChangeUserPassword';
 import { Statics } from '../components/Stats/Statics';
+import Notification from '../components/Notify/Notification';
 
 export function AppRouter() {
     return (
@@ -162,6 +163,14 @@ export function AppRouter() {
                     <Statics />
                   </ProtectedRoutes>
                             )}
+              />
+              <Route
+                path="/test"
+                element={(
+                  <PublicRoutes>
+                    <Notification />
+                  </PublicRoutes>
+                )}
               />
             </Routes>
           </AuthProvider>

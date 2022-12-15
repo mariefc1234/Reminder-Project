@@ -1,40 +1,50 @@
-/* eslint-disable no-loop-func */
+/* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 import dayjs from 'dayjs';
-import React, { useContext, useEffect } from 'react';
-import addNotification from 'react-push-notification';
+import React, { useContext, useEffect, useState } from 'react';
 import { context } from '../../context/authContext';
 import { getSeconds } from '../../helpers/getSeconds';
 import { useFetchGet } from '../../hooks/useFetchGet';
+import Notification from './Notification';
 
 export function Notify() {
     const authContext = useContext(context);
+    const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
     const { data, loading } = useFetchGet('http://localhost:8080/api/hours', authContext.token);
+    const [isOpen, setIsOpen] = useState(true);
 
     const acceptReminder = async (idReminder) => {
-        fetch(`http://localhost:8080/api/stat/${idReminder}`, {
+        await fetch(`http://localhost:8080/api/stat/${idReminder}`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
         });
     };
 
     const alert = (reminder) => {
-        console.log(reminder);
-
-        addNotification({
+        setIsOpen(true);
+        setAnnouncementDialog({
+            isOpen,
             title: reminder.name,
-            duration: 10000,
-            native: true,
-            onClick: () => acceptReminder(reminder.idReminder),
+            onConfirm: () => {
+                setAnnouncementDialog({
+                    ...announcementDialog,
+                    isOpen: false,
+                });
+                acceptReminder(reminder.idReminder);
+            },
         });
-    };
+        setTimeout(() => {
+            setAnnouncementDialog({
+                        ...announcementDialog,
+                        isOpen: false,
+                    });
+            }, 5000);
+        };
 
     const alerts = (reminders = []) => {
         const houract = dayjs().format('HH:mm:ss');
         const seconds = getSeconds(houract);
         const secondsReminder = reminders[0].seconds;
-
-        console.log(seconds, secondsReminder);
 
         if (seconds >= secondsReminder) {
             reminders.shift();
@@ -60,6 +70,6 @@ export function Notify() {
     }, [loading]);
 
     return (
-      <div />
+      <Notification announcementDialog={announcementDialog} setAnnouncementDialog={setAnnouncementDialog} />
     );
 }
