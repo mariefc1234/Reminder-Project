@@ -2,6 +2,7 @@
 /* eslint-disable arrow-body-style */
 import dayjs from 'dayjs';
 import React, { useContext, useEffect } from 'react';
+import addNotification from 'react-push-notification';
 import { context } from '../../context/authContext';
 import { getSeconds } from '../../helpers/getSeconds';
 import { useFetchGet } from '../../hooks/useFetchGet';
@@ -10,8 +11,22 @@ export function Notify() {
     const authContext = useContext(context);
     const { data, loading } = useFetchGet('http://localhost:8080/api/hours', authContext.token);
 
+    const acceptReminder = async (idReminder) => {
+        fetch(`http://localhost:8080/api/stat/${idReminder}`, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
+        });
+    };
+
     const alert = (reminder) => {
         console.log(reminder);
+
+        addNotification({
+            title: reminder.name,
+            duration: 10000,
+            native: true,
+            onClick: () => acceptReminder(reminder.idReminder),
+        });
     };
 
     const alerts = (reminders = []) => {
