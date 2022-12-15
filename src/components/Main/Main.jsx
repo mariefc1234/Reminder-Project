@@ -7,7 +7,6 @@ import { context } from '../../context/authContext';
 import { useFetchGet } from '../../hooks/useFetchGet';
 import UserMenu from '../Utilities/Menu/UserMenu';
 import TabReminder from '../ConfigureReminder/TabReminder';
-import TabStats from '../Stats/TabStats';
 import TabToDo from '../ToDos/TabToDo';
 import { Notify } from '../Notify/Notify';
 
@@ -37,12 +36,10 @@ export function Main() {
         <Notify />
         <Tabs value={tabValue} onChange={handleTabs} centered>
           <Tab label="Reminder" />
-          <Tab label="Stats" />
           <Tab label="To Do" />
         </Tabs>
         <TabReminder value={tabValue} index={0}>Item detail 1</TabReminder>
-        <TabStats value={tabValue} index={1}>Item detail 2 </TabStats>
-        <TabToDo value={tabValue} index={2}>tab To dos </TabToDo>
+        <TabToDo value={tabValue} index={1}>tab To dos </TabToDo>
       </div>
     );
 }

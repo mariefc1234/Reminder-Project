@@ -19,7 +19,7 @@ export function Notify() {
         const seconds = getSeconds(houract);
         const secondsReminder = reminders[0].seconds;
 
-        console.log(seconds, secondsReminder);
+        // console.log(seconds, secondsReminder);
 
         if (seconds >= secondsReminder) {
             reminders.shift();

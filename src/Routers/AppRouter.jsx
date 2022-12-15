@@ -22,6 +22,7 @@ import ChangePassword from '../components/ChangePassword/ChangePassword';
 import PleaseConfirm from '../components/ConfirmEmail/PleaseConfirm';
 import { EmailConfirmed } from '../components/ConfirmEmail/EmailConfirmed';
 import ChangeUserPassword from '../components/UserSettings/ChangeUserPassword';
+import { Statics } from '../components/Stats/Statics';
 
 export function AppRouter() {
     return (
@@ -151,6 +152,14 @@ export function AppRouter() {
                 element={(
                   <ProtectedRoutes>
                     <ChangeUserPassword />
+                  </ProtectedRoutes>
+                            )}
+              />
+              <Route
+                path="/statics"
+                element={(
+                  <ProtectedRoutes>
+                    <Statics />
                   </ProtectedRoutes>
                             )}
               />
