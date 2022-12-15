@@ -8,6 +8,7 @@ import ScheduleIcon from '@mui/icons-material/Schedule';
 import LoopIcon from '@mui/icons-material/Loop';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { useNavigate } from 'react-router-dom';
 import { ReminderForm } from './ReminderForm';
 import Popup from '../Utilities/Dialogs/Popup';
 import { context } from '../../context/authContext';
@@ -17,6 +18,7 @@ import CustomAlert from '../Utilities/Dialogs/CustomAlert';
 import ConfirmDialog from '../Utilities/Dialogs/ConfirmDialog';
 
 export default function TabReminder(props) {
+  const navigate = useNavigate();
   const authContext = useContext(context);
   const { value, index } = props;
   const [openPopup, setOpenPopup] = useState(false);
@@ -32,6 +34,10 @@ export default function TabReminder(props) {
   const openInPopup = (rem) => {
       setReminderObject(rem);
       setOpenPopup(true);
+  };
+
+  const viewStatics = (idRem) => {
+    navigate(`/statics?id=${idRem}`);
   };
 
   const isCompleted = (status, text, severity) => {
@@ -110,6 +116,9 @@ export default function TabReminder(props) {
                       >
                         <DeleteIcon />
                       </IconButton>
+                      <Box display="flex">
+                        <Button variant="defaultButton" onClick={(e) => { e.preventDefault(); viewStatics(reminder.id); }}>Statics</Button>
+                      </Box>
                     </Grid>
                   </Grid>
                   <Grid item>
