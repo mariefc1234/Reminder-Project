@@ -22,7 +22,7 @@ export function ForgotPassword(props) {
     if (email === '') {
       setEmailError(true);
     } else {
-      const res = await fetch('http://localhost:8080/api/email/sendPasswordConfirmation', {
+      const res = await fetch('https://reminder.herokuapp.com/api/email/sendPasswordConfirmation', {
       method: 'POST',
       body: JSON.stringify({
       email,

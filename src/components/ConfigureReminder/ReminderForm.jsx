@@ -59,7 +59,7 @@ export function ReminderForm(param) {
     if (validateForm()) {
       if (isEdited) {
         // Edit reminder
-        const res = await fetch(`http://localhost:8080/api/reminder/${reminder.id}`, {
+        const res = await fetch(`https://reminder.herokuapp.com/api/reminder/${reminder.id}`, {
           method: 'PUT',
           body: JSON.stringify({
             name: title,
@@ -86,7 +86,7 @@ export function ReminderForm(param) {
         }
       } else {
         // Create reminder
-        const res = await fetch('http://localhost:8080/api/reminder', {
+        const res = await fetch('https://reminder.herokuapp.com/api/reminder', {
           method: 'POST',
           body: JSON.stringify({
             name: title,

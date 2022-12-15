@@ -12,7 +12,7 @@ export function EmailConfirmed() {
   const navigate = useNavigate();
 
   const confirmMail = async () => {
-    await fetch(`http://localhost:8080/api/email/confirmMail/${pin}`, {
+    await fetch(`https://reminder.herokuapp.com/api/email/confirmMail/${pin}`, {
       method: 'POST',
       headers: { 'Content-type': 'application/json; charset=UTF-8' },
     });

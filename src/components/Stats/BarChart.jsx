@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
@@ -5,14 +6,10 @@ import Chart from 'react-apexcharts';
 export default function BarChart(props) {
   const { todayStats } = props;
   const [accepted, setAccepted] = useState(todayStats.accepted);
-  console.log(todayStats);
 
   useEffect(() => {
-    console.log(todayStats);
     if (todayStats !== undefined) {
-      console.log(todayStats);
       setAccepted(todayStats.accepted);
-      console.log(accepted);
     }
   }, []);
 

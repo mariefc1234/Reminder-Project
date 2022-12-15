@@ -14,17 +14,17 @@ export function Main() {
     const authContext = useContext(context);
     const navigate = useNavigate();
 
-    const { data } = useFetchGet('http://localhost:8080/api/user', authContext.token);
+    const { data, loading } = useFetchGet('https://reminder.herokuapp.com/api/user', authContext.token);
 
     useEffect(() => {
-      if (data) {
+      if (!loading) {
         if (data.data.emailconfirmed === 0) {
           navigate('/pleaseconfirmmail');
         } else if (data.data.isregistered === 0) {
           navigate('/userinforegister', { replace: true });
         }
       }
-    }, [data]);
+    }, [loading]);
 
     const [tabValue, setTabValue] = useState(0);
     const handleTabs = (e, val) => {

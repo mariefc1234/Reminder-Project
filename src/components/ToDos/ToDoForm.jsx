@@ -27,7 +27,7 @@ export default function ToDoForm(paramsToDo) {
       const endDate = dayjs(date).valueOf();
       if (isEdited) {
         // Edit to do
-        const res = await fetch(`http://localhost:8080/api/todo/${toDo.id}`, {
+        const res = await fetch(`https://reminder.herokuapp.com/api/todo/${toDo.id}`, {
           method: 'PUT',
           body: JSON.stringify({
             description,
@@ -47,7 +47,7 @@ export default function ToDoForm(paramsToDo) {
       }
       } else {
         // Create to do
-        const res = await fetch('http://localhost:8080/api/todo', {
+        const res = await fetch('https://reminder.herokuapp.com/api/todo', {
           method: 'POST',
           body: JSON.stringify({
             description,

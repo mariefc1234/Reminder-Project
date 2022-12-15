@@ -28,7 +28,7 @@ export default function TabReminder(props) {
   const [reminders, setReminders] = useState([]);
   const [isEdited, setIsEdited] = useState(false);
 
-  const urlReminder = 'http://localhost:8080/api/reminder';
+  const urlReminder = 'https://reminder.herokuapp.com/api/reminder';
   const { data, loading } = useFetchGet(urlReminder, authContext.token);
 
   const openInPopup = (rem) => {
@@ -64,7 +64,7 @@ export default function TabReminder(props) {
       isOpen: false,
     });
 
-    const res = await fetch(`http://localhost:8080/api/reminder/${item}`, {
+    const res = await fetch(`https://reminder.herokuapp.com/api/reminder/${item}`, {
     method: 'DELETE',
     headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
     });

@@ -12,12 +12,12 @@ import CustomAlert from '../Utilities/Dialogs/CustomAlert';
 export default function PleaseConfirm() {
   const authContext = useContext(context);
   const navigate = useNavigate();
-  const { data } = useFetchGet('http://localhost:8080/api/user', authContext.token);
+  const { data } = useFetchGet('https://reminder.herokuapp.com/api/user', authContext.token);
   const [alert, setAlert] = useState({ isOpen: false, message: '', severity: 'warning' });
 
   const sendMail = async (e) => {
     e.preventDefault();
-    const resMail = await fetch('http://localhost:8080/api/email/sendConfirmation', {
+    const resMail = await fetch('https://reminder.herokuapp.com/api/email/sendConfirmation', {
           method: 'POST',
           headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
     });

@@ -13,7 +13,7 @@ import { useFetchGet } from '../../hooks/useFetchGet';
 export default function ChangeUserInfo() {
   // const { userInfo } = params;
   const authContext = useContext(context);
-  const { data } = useFetchGet('http://localhost:8080/api/user/data', authContext.token);
+  const { data } = useFetchGet('https://reminder.herokuapp.com/api/user/data', authContext.token);
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [gender, setGender] = React.useState('');
@@ -23,7 +23,7 @@ export default function ChangeUserInfo() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:8080/api/user', {
+    const res = await fetch('https://reminder.herokuapp.com/api/user', {
       method: 'PATCH',
       body: JSON.stringify({
       weight,

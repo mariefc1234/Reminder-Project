@@ -69,7 +69,7 @@ export function UserInfoRegister() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      const res = await fetch('http://localhost:8080/api/auth/registerdata', {
+      const res = await fetch('https://reminder.herokuapp.com/api/auth/registerdata', {
         method: 'POST',
         body: JSON.stringify({
         weight,

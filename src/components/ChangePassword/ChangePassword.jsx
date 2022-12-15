@@ -18,7 +18,7 @@ export default function ChangePassword() {
 
   const changePassword = async (e) => {
     e.preventDefault();
-    const res = await fetch(`http://localhost:8080/api/email/changePassword/${pin}`, {
+    const res = await fetch(`https://reminder.herokuapp.com/api/email/changePassword/${pin}`, {
       method: 'POST',
       body: JSON.stringify({
       password,

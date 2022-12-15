@@ -52,7 +52,7 @@ export function Signup() {
         severity: 'error',
       });
     } else {
-      const res = await fetch('http://localhost:8080/api/auth/register', {
+      const res = await fetch('https://reminder.herokuapp.com/api/auth/register', {
         method: 'POST',
         body: JSON.stringify({
           username,
@@ -78,7 +78,7 @@ export function Signup() {
       }
 
       if (isRegistered) {
-        await fetch('http://localhost:8080/api/email/sendConfirmation', {
+        await fetch('https://reminder.herokuapp.com/api/email/sendConfirmation', {
           method: 'POST',
           headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: resJSON.data.token },
         });

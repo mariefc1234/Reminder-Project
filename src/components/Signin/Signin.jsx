@@ -33,7 +33,7 @@ export function Signin() {
   } = formValues;
   const handleLogin = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:8080/api/auth/login', {
+    const res = await fetch('https://reminder.herokuapp.com/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({
       email,

@@ -18,7 +18,7 @@ import ConfirmDialog from '../Utilities/Dialogs/ConfirmDialog';
 export default function TabToDo(props) {
   const { value, index } = props;
   const authContext = useContext(context);
-  const urlReminder = 'http://localhost:8080/api/todo';
+  const urlReminder = 'https://reminder.herokuapp.com/api/todo';
   const { data, loading } = useFetchGet(urlReminder, authContext.token);
   const [activeTodos, setActiveTodos] = useState([]);
   const [openPopup, setOpenPopup] = useState(false);
@@ -50,7 +50,7 @@ export default function TabToDo(props) {
       isOpen: false,
     });
 
-    const res = await fetch(`http://localhost:8080/api/todo/${item}`, {
+    const res = await fetch(`https://reminder.herokuapp.com/api/todo/${item}`, {
     method: 'DELETE',
     headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
     });

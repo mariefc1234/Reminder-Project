@@ -74,7 +74,7 @@ export function ConfigureReminder() {
     e.preventDefault();
 
     if (validateForm()) {
-      const res = await fetch('http://localhost:8080/api/reminder', {
+      const res = await fetch('https://reminder.herokuapp.com/api/reminder', {
         method: 'POST',
         body: JSON.stringify({
           name,

@@ -10,11 +10,11 @@ import Notification from './Notification';
 export function Notify() {
     const authContext = useContext(context);
     const [announcementDialog, setAnnouncementDialog] = useState({ isOpen: false, title: '', subTitle: '' });
-    const { data, loading } = useFetchGet('http://localhost:8080/api/hours', authContext.token);
+    const { data, loading } = useFetchGet('https://reminder.herokuapp.com/api/hours', authContext.token);
     const [isOpen, setIsOpen] = useState(true);
 
     const acceptReminder = async (idReminder) => {
-        await fetch(`http://localhost:8080/api/stat/${idReminder}`, {
+        await fetch(`https://reminder.herokuapp.com/api/stat/${idReminder}`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json; charset=UTF-8', authtoken: authContext.token },
         });

@@ -25,7 +25,7 @@ export function ContactUs() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch('http://localhost:8080/api/contact', {
+    const res = await fetch('https://reminder.herokuapp.com/api/contact', {
         method: 'POST',
         body: JSON.stringify({
           email,

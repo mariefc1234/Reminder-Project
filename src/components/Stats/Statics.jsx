@@ -10,7 +10,7 @@ export function Statics() {
   const id = queryParameters.get('id');
 
   const authContext = useContext(context);
-  const urlReminder = `http://localhost:8080/api/stat/${id}`;
+  const urlReminder = `https://reminder.herokuapp.com/api/stat/${id}`;
   const { data } = useFetchGet(urlReminder, authContext.token);
 
   const [todayStats, setTodayStats] = useState([]);
